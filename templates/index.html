@@ -149,6 +149,7 @@
                                 <div class="status-indicator pulsing" style="display: inline-block; margin-right: 0.5rem;"></div>
                                 <span style="font-size: 0.75rem; color: var(--primary-color); font-weight: 700; letter-spacing: 0.1em;">NEURAL SCAN IN PROGRESS...</span>
                             </div>
+                            <button type="submit" id="vision-submit-btn" class="btn-primary" style="display: none; margin-top: 1rem; padding: 0.8rem; font-size: 0.7rem;">PROCEED WITH SCAN</button>
                         </div>
 
                         <div class="form-group" style="margin-bottom: 2rem;">
@@ -203,12 +204,14 @@
 
         function showScanning() {
             const indicator = document.getElementById('scanning-indicator');
+            const submitBtn = document.getElementById('vision-submit-btn');
             indicator.style.display = 'block';
+            submitBtn.style.display = 'block';
             
-            // Simulate a short delay for the "cool" factor
+            // Auto-submit after a brief delay to show the "scanning" state
             setTimeout(() => {
-                // In a real app, we would wait for the upload to complete
-            }, 2000);
+                document.querySelector('form').submit();
+            }, 1500);
         }
     </script>
 </body>

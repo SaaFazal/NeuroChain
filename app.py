@@ -301,7 +301,9 @@ def forecast():
 
     # 3. Fetch ALL historical data for this shop from DB
     history = Sale.query.filter_by(shop_id=shop_id).order_by(Sale.date).all()
-    if len(history) < 3: return "Need at least 3 days of historical data (total) for this shop.", 400
+    if len(history) < 3:
+        flash(f"Neural engine needs at least 3 historical records to compute a forecast. You currently have {len(history)}.", "danger")
+        return redirect(url_for('index', shop_id=shop_id))
 
     df = pd.DataFrame([{'date': s.date, 'sales': s.amount} for s in history])
     df['date'] = pd.to_datetime(df['date'])
