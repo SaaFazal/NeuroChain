@@ -406,16 +406,18 @@ def forecast():
     forecast_df.to_csv(csv_path, index=False)
 
     return render_template('result.html', 
-                           graphJSON=graphJSON,
-                           decomp_data=decomp_data,
-                           csv_path=csv_path,
-                           table_data=forecast_df.to_dict(orient='records'), 
-                           insights=insights,
-                           reasoning=reasoning,
-                           days=days_to_forecast,
-                           total_forecast=round(forecast_vals.sum(), 2),
-                           total_historical=round(df[price_col].sum(), 2),
-                           ai_advice=ai_advice[:4])
+    # 5. Render results back to the dashboard (index.html)
+    return render_template(
+        'index.html',
+        graphJSON=graphJSON,
+        ai_advice=ai_advice,
+        history=history,
+        categories=Category.query.all(),
+        shops=Shop.query.filter_by(user_id=current_user.id).all(),
+        selected_shop=target_shop,
+        total_forecast=round(forecast_vals.sum(), 2),
+        total_historical=round(df[price_col].sum(), 2)
+    )
 
 @app.route('/download')
 def download():
