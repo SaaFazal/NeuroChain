@@ -11,14 +11,14 @@
         <!-- Top Navigation -->
         <header class="top-status-bar" style="background: white; border-bottom: 1px solid var(--border-color);">
             <div class="header-main-info" style="display: flex; align-items: center; gap: 1rem;">
-                <div style="font-weight: 800; font-size: 1.2rem; color: var(--primary-color); letter-spacing: -0.02em;">RETAIL<span style="color: var(--text-primary);">FLOW</span></div>
+                <div style="font-weight: 800; font-size: 1.2rem; color: var(--primary-color); letter-spacing: -0.02em;">RETAIL<span style="color: var(--accent-color);">FLOW</span></div>
             </div>
             <div class="header-actions" style="display: flex; gap: 1.5rem; align-items: center;">
                 <div class="manager-info">
                     <div style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Account</div>
-                    <div style="font-size: 0.9rem; font-weight: 600;">{{ current_user.username }}</div>
+                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary-color);">{{ current_user.username }}</div>
                 </div>
-                <a href="/logout" class="btn-logout" style="padding: 0.5rem 1rem; border-radius: 6px; background: #fee2e2; color: #dc2626; text-decoration: none; font-size: 0.75rem; font-weight: 700;">LOG OUT</a>
+                <a href="/logout" class="btn-logout" style="padding: 0.5rem 1rem; border-radius: 6px; background: #fee2e2; color: var(--alert-color); text-decoration: none; font-size: 0.75rem; font-weight: 700;">LOG OUT</a>
             </div>
         </header>
 
@@ -71,7 +71,7 @@
                             <tr style="border-bottom: 1px solid var(--bg-color);">
                                 <td style="padding: 1.2rem 1rem; font-size: 0.95rem;">{{ sale.date }}</td>
                                 <td style="padding: 1.2rem 1rem;">
-                                    <span style="padding: 0.3rem 0.8rem; background: var(--surface-hover); border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: var(--primary-color);">
+                                    <span style="padding: 0.3rem 0.8rem; background: var(--bg-color); border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: var(--primary-color); border: 1px solid var(--border-color);">
                                         {{ sale.category.name if sale.category else 'General' }}
                                     </span>
                                 </td>

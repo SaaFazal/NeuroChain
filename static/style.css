@@ -1,17 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-color: #f8fafc;
-    --surface-color: #ffffff;
-    --surface-hover: #f1f5f9;
-    --border-color: #e2e8f0;
-    --primary-color: #2563eb;
-    --primary-glow: rgba(37, 99, 235, 0.1);
-    --success-color: #059669;
-    --accent-color: #1e293b;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --glass-blur: blur(0px); /* Not needed in light mode */
+    --bg-color: #F7F3E8; /* Warm Cream */
+    --surface-color: #FFFFFF; /* Fresh White */
+    --surface-hover: #F1F5F9;
+    --border-color: #E2E8F0;
+    --primary-color: #3F7D58; /* Primary Green */
+    --primary-glow: rgba(63, 125, 88, 0.1);
+    --accent-color: #D6A84F; /* Accent Gold */
+    --text-primary: #1F2933; /* Deep Charcoal */
+    --text-secondary: #64748B;
+    --success-color: #2E9D63;
+    --alert-color: #D95D5D;
+    --glass-blur: blur(0px);
 }
 
 * {
@@ -282,8 +283,9 @@ label {
 }
 
 .btn-primary:hover {
-    background: #1d4ed8;
+    background: #2E5B41; /* Deeper Green */
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(63, 125, 88, 0.2);
 }
 
 /* KPI Grid */
