@@ -404,7 +404,8 @@ def forecast():
                            insights=insights,
                            reasoning=reasoning,
                            days=days_to_forecast,
-                           avg_forecast=round(forecast_vals.mean(), 2),
+                           total_forecast=round(forecast_vals.sum(), 2),
+                           total_historical=round(df[price_col].sum(), 2),
                            ai_advice=ai_advice[:4])
 
 @app.route('/download')
