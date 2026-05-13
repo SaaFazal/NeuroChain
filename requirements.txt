@@ -8,3 +8,4 @@ statsmodels
 numpy
 gunicorn
 scikit-learn
+psycopg2-binary

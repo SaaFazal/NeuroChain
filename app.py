@@ -13,9 +13,17 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 
+import os
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'neural-forecast-secret-key-99'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///supplychain.db'
+app.secret_key = 'neurochain_secret_key'
+
+# Database Configuration (Cloud + Local Fallback)
+database_url = os.environ.get('DATABASE_URL')
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///supplychain.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
