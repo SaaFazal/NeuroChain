@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RetailFlow | Inventory Intelligence</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="../static/style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <!-- Parallax Background Section -->
     <div class="parallax-bg">
         <video autoplay muted loop playsinline style="position: absolute; top: 15%; left: -10%; width: 120%; height: 120%;">
-            <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
+            <source src="../static/bg_video.mp4" type="video/mp4">
         </video>
     </div>
     <!-- This overlay fades as you scroll -->
@@ -44,7 +44,7 @@
 
                 <!-- Main Chart Card -->
                 <div class="glass-card">
-                    <h3 style="font-size: 1rem; margin-bottom: 2rem; color: var(--text-secondary);">Forecast Trajectory • {{ selected_shop.name if selected_shop else 'Primary Location' }}</h3>
+                    <h3 style="font-size: 1rem; margin-bottom: 2rem; color: var(--text-secondary);">Forecast Trajectory • Ushop Nottingham</h3>
                     <div id="forecast-chart" style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;">
                         {% if graphJSON %}
                             <div id="plotly-graph" style="width: 100%; height: 100%;"></div>
@@ -64,7 +64,7 @@
                         <div class="kpi-card">
                             <div style="font-size: 1.5rem; margin-bottom: 1rem;">🥩</div>
                             <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Top Category</div>
-                            <div style="font-size: 1.4rem; font-weight: 800; margin: 0.5rem 0;">{{ ai_advice[0].category if ai_advice else 'Meat' }}</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; margin: 0.5rem 0;">Meat</div>
                             <div style="font-size: 0.75rem; color: var(--success-color); font-weight: 700;">High Momentum</div>
                         </div>
                         <div class="kpi-card">
