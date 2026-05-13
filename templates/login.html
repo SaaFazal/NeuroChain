@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | NeuroChain AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page">
+    <div class="dashboard-container" style="height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="glass-card animate-fade" style="width: 100%; max-width: 450px; padding: 3rem;">
+            <header style="margin-bottom: 2rem; text-align: center;">
+                <h1 style="font-size: 2rem;">NeuroChain</h1>
+                <p class="subtitle">Access the Neural Ingestion Portal</p>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="input-minimal" placeholder="Enter your ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="input-minimal" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 1rem;">Authenticate</button>
+            </form>
+
+            <p style="margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
+                New architect? <a href="{{ url_for('register') }}" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Initialize Node</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

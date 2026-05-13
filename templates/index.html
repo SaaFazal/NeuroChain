@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroChain | Command Center</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="command-center">
+        <!-- Top Status Bar -->
+        <header class="top-status-bar">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-weight: 800; font-size: 1.2rem; letter-spacing: -0.05em;">NEURO<span style="color: var(--primary-color);">CHAIN</span></div>
+                <div style="height: 20px; width: 1px; background: var(--border-color);"></div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em;">
+                    <span class="status-indicator pulsing"></span>
+                    System Online
+                </div>
+            </div>
+            <div style="display: flex; gap: 2.5rem; align-items: center;">
+                <div style="text-align: right;">
+                    <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active Architect</div>
+                    <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary-color);">{{ current_user.username }}</div>
+                </div>
+                <a href="/logout" style="padding: 0.5rem 1.25rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: 0.3s; background: rgba(239, 68, 68, 0.05);" onmouseover="this.style.background='rgba(239, 68, 68, 0.1)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.05)'">TERMINATE SESSION</a>
+            </div>
+        </header>
+
+        <!-- Sidebar: Node Management -->
+        <aside class="sidebar">
+            <div style="margin-bottom: 2.5rem;">
+                <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-secondary); margin-bottom: 1.5rem;">Network Nodes</h3>
+                <nav>
+                    {% for shop in shops %}
+                    <a href="/?shop_id={{ shop.id }}" class="node-item {% if selected_shop and selected_shop.id == shop.id %}active{% endif %}">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800;">
+                            {{ shop.name[0] | upper }}
+                        </div>
+                        <span style="font-size: 0.9rem; font-weight: 500;">{{ shop.name }}</span>
+                    </a>
+                    {% endfor %}
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Stage: Data & History -->
+        <main class="main-stage">
+            <div style="margin-bottom: 3rem;">
+                <h1 style="font-size: 2.5rem; letter-spacing: -0.02em; margin-bottom: 0.5rem;">Node Intelligence</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">Live metrics and predictive insights for <span style="color: var(--text-primary); font-weight: 600;">{{ selected_shop.name if selected_shop else 'Primary Node' }}</span></p>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-color);">Historical Ingestion Data</h2>
+                    <div style="padding: 0.4rem 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 20px; color: var(--success-color); font-size: 0.7rem; font-weight: 700;">SYNCED</div>
+                </div>
+
+                {% if history %}
+                <div style="overflow-x: auto;">
+                    <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 1px solid var(--border-color);">
+                                <th style="padding: 1rem; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase;">Date</th>
+                                <th style="padding: 1rem; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase;">Category</th>
+                                <th style="padding: 1rem; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase;">Amount (£)</th>
+                                <th style="padding: 1rem; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase;">Integrity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in history %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                <td style="padding: 1.2rem 1rem; font-family: monospace; font-size: 0.9rem;">{{ sale.date }}</td>
+                                <td style="padding: 1.2rem 1rem;">
+                                    <span style="padding: 0.2rem 0.6rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px; font-size: 0.7rem; color: var(--primary-color); font-weight: 600;">
+                                        {{ sale.category.name if sale.category else 'General' }}
+                                    </span>
+                                </td>
+                                <td style="padding: 1.2rem 1rem; font-weight: 600;">£{{ "%.2f"|format(sale.amount) }}</td>
+                                <td style="padding: 1.2rem 1rem;">
+                                    <span style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--success-color);">
+                                        <span class="status-indicator" style="width: 6px; height: 6px;"></span> Sync
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div style="padding: 4rem 2rem; text-align: center; border: 1px dashed var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.1);">
+                    <div style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;">📊</div>
+                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Node Memory Empty</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 300px; margin: 0 auto;">No records found for this node. Use the Neural Ingestion panel to initialize data.</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Utility Panel: Ingestion -->
+        <aside class="utility-panel">
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-secondary); margin-bottom: 1.5rem;">Neural Ingestion</h3>
+                
+                <div class="glass-card" style="padding: 1.5rem; border-color: var(--primary-color);">
+                    <form action="/forecast" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
+                        <input type="hidden" name="mode" id="input-mode" value="upload">
+
+                        <div style="display: flex; background: rgba(0,0,0,0.2); padding: 0.3rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <button type="button" id="btn-upload" class="mode-btn active" style="flex: 1; font-size: 0.65rem;" onclick="switchMode('upload')">CSV</button>
+                            <button type="button" id="btn-manual" class="mode-btn" style="flex: 1; font-size: 0.65rem;" onclick="switchMode('manual')">MANUAL</button>
+                            <button type="button" id="btn-vision" class="mode-btn" style="flex: 1; font-size: 0.65rem;" onclick="switchMode('vision')">VISION</button>
+                        </div>
+
+                        <!-- CSV Mode -->
+                        <div id="section-upload">
+                            <label style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Enterprise Dataset</label>
+                            <input type="file" name="file" accept=".csv" class="input-minimal" style="font-size: 0.8rem; margin-bottom: 1.5rem;">
+                        </div>
+
+                        <!-- Manual Mode -->
+                        <div id="section-manual" style="display: none;">
+                            <label style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Local Metrics</label>
+                            <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
+                                <select name="category_id" class="custom-select" style="font-size: 0.8rem; padding: 0.6rem;">
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="date" name="date" class="input-minimal" style="font-size: 0.8rem;">
+                                <input type="number" step="0.01" name="amount" placeholder="Sales Amount (£)" class="input-minimal" style="font-size: 0.8rem;">
+                            </div>
+                        </div>
+
+                        <!-- Vision Mode (New) -->
+                        <div id="section-vision" style="display: none;">
+                            <label style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Visual Node (Receipt)</label>
+                            <div style="padding: 1.5rem; border: 1px dashed var(--border-color); border-radius: 12px; text-align: center; background: rgba(59, 130, 246, 0.05); margin-bottom: 1.5rem;">
+                                <input type="file" name="receipt_image" id="receipt-upload" accept="image/*" style="display: none;" onchange="showScanning()">
+                                <label for="receipt-upload" style="cursor: pointer;">
+                                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📸</div>
+                                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary-color);">Capture or Upload Receipt</div>
+                                    <div style="font-size: 0.6rem; color: var(--text-secondary); margin-top: 0.3rem;">Neural OCR Engine Active</div>
+                                </label>
+                            </div>
+                            <div id="scanning-indicator" style="display: none; margin-bottom: 1.5rem; text-align: center;">
+                                <div class="status-indicator pulsing" style="display: inline-block; margin-right: 0.5rem;"></div>
+                                <span style="font-size: 0.75rem; color: var(--primary-color); font-weight: 700; letter-spacing: 0.1em;">NEURAL SCAN IN PROGRESS...</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Forecast Horizon</label>
+                            <select class="custom-select" name="days" style="font-size: 0.8rem; height: auto; padding: 0.6rem;">
+                                <option value="7">Tactical (7 Days)</option>
+                                <option value="14">Operational (14 Days)</option>
+                                <option value="30">Strategic (30 Days)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="padding: 1rem; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.05em;">EXECUTE NEURAL FORECAST</button>
+                    </form>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.7rem; line-height: 1.5;">
+                <p>NEUROCHAIN ENGINE v2.4.0</p>
+                <p>Secure Node: {{ selected_shop.name if selected_shop else 'PENDING' }}</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function switchMode(mode) {
+            const uploadBtn = document.getElementById('btn-upload');
+            const manualBtn = document.getElementById('btn-manual');
+            const visionBtn = document.getElementById('btn-vision');
+            const uploadSec = document.getElementById('section-upload');
+            const manualSec = document.getElementById('section-manual');
+            const visionSec = document.getElementById('section-vision');
+            const inputMode = document.getElementById('input-mode');
+
+            // Reset
+            [uploadBtn, manualBtn, visionBtn].forEach(b => b.classList.remove('active'));
+            [uploadSec, manualSec, visionSec].forEach(s => s.style.display = 'none');
+
+            if (mode === 'upload') {
+                uploadBtn.classList.add('active');
+                uploadSec.style.display = 'block';
+                inputMode.value = 'upload';
+            } else if (mode === 'manual') {
+                manualBtn.classList.add('active');
+                manualSec.style.display = 'block';
+                inputMode.value = 'manual';
+            } else {
+                visionBtn.classList.add('active');
+                visionSec.style.display = 'block';
+                inputMode.value = 'vision';
+            }
+        }
+
+        function showScanning() {
+            const indicator = document.getElementById('scanning-indicator');
+            indicator.style.display = 'block';
+            
+            // Simulate a short delay for the "cool" factor
+            setTimeout(() => {
+                // In a real app, we would wait for the upload to complete
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
