@@ -29,31 +29,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
-# Ensure tables and categories exist (Runs on both local and Render)
-with app.app_context():
-    db.create_all()
-    # Initialize default categories if they don't exist
-    from sqlalchemy import inspect
-    inspector = inspect(db.engine)
-    if 'category' in inspector.get_table_names():
-        from app import Category # Late import to avoid issues
-        try:
-            if not Category.query.first():
-                default_cats = ['Meat', 'Grocery', 'Dairy', 'Household', 'Beverages']
-                for cat_name in default_cats:
-                    db.session.add(Category(name=cat_name))
-                db.session.commit()
-        except:
-            pass # Avoid crash if table is still being created
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-
-# --- Models ---
-
+# Move model definitions ABOVE the initialization block
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
     shops = db.relationship('Shop', backref='owner', lazy=True)
 
 class Shop(db.Model):
@@ -73,6 +53,20 @@ class Sale(db.Model):
     amount = db.Column(db.Float, nullable=False)
     shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
+
+# Ensure tables and categories exist
+with app.app_context():
+    db.create_all()
+    try:
+        if not Category.query.first():
+            default_cats = ['Meat', 'Grocery', 'Dairy', 'Household', 'Beverages']
+            for cat_name in default_cats:
+                db.session.add(Category(name=cat_name))
+            db.session.commit()
+    except Exception as e:
+        print(f"DB Init Warning: {e}")
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
