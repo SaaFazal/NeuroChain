@@ -283,21 +283,28 @@ def forecast():
             db.session.commit()
 
     elif mode == 'vision':
-        # Simulate Vision OCR Processing
+        # Simulated Multi-Item OCR Extraction
         import random
-        # In a real app, we would process request.files.get('receipt_image')
-        # Here we mock the result of reading a receipt
-        simulated_amount = round(random.uniform(15.50, 85.00), 2)
-        meat_cat = Category.query.filter_by(name='Meat').first()
-        new_sale = Sale(
-            date=datetime.now().date(),
-            amount=simulated_amount,
-            shop_id=shop_id,
-            category_id=meat_cat.id if meat_cat else None
-        )
-        db.session.add(new_sale)
+        # In a production environment, we would use an AI Vision API here
+        # to extract every line item from the receipt image.
+        items_detected = [
+            {"name": "Ribeye Steak", "cat": "Meat", "amt": random.uniform(25, 45)},
+            {"name": "Whole Milk", "cat": "Dairy", "amt": random.uniform(1.2, 3.5)},
+            {"name": "Artisan Bread", "cat": "Grocery", "amt": random.uniform(2.5, 5.0)}
+        ]
+        
+        for item in items_detected:
+            cat = Category.query.filter_by(name=item['cat']).first()
+            new_sale = Sale(
+                date=datetime.now().date(),
+                amount=round(item['amt'], 2),
+                shop_id=shop_id,
+                category_id=cat.id if cat else None
+            )
+            db.session.add(new_sale)
+        
         db.session.commit()
-        flash(f'Neural Vision synced: {meat_cat.name if meat_cat else "Item"} detected (£{simulated_amount})', 'success')
+        flash(f'Neural Vision: {len(items_detected)} items successfully extracted and indexed.', 'success')
 
     # 3. Fetch ALL historical data for this shop from DB
     history = Sale.query.filter_by(shop_id=shop_id).order_by(Sale.date).all()

@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-color: #050508;
-    --surface-color: rgba(255, 255, 255, 0.02);
-    --surface-hover: rgba(255, 255, 255, 0.04);
-    --border-color: rgba(255, 255, 255, 0.06);
-    --primary-color: #6366f1;
-    --primary-glow: rgba(99, 102, 241, 0.3);
-    --success-color: #059669;
-    --accent-color: #8b5cf6;
-    --text-primary: #f1f5f9;
-    --text-secondary: #64748b;
-    --glass-blur: blur(20px);
+    --bg-color: #08080a;
+    --surface-color: rgba(255, 255, 255, 0.01);
+    --surface-hover: rgba(255, 255, 255, 0.03);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --primary-color: #facc15; /* Industrial Yellow */
+    --primary-glow: rgba(250, 204, 21, 0.1);
+    --success-color: #facc15;
+    --accent-color: #ffffff;
+    --text-primary: #ffffff;
+    --text-secondary: #71717a;
+    --glass-blur: blur(25px);
 }
 
 * {
@@ -161,28 +161,21 @@ body {
 .status-indicator {
     width: 6px;
     height: 6px;
-    border-radius: 50%;
-    background: var(--success-color);
-    box-shadow: 0 0 12px var(--success-color);
+    border-radius: 2px; /* Square/Industrial */
+    background: var(--primary-color);
 }
 
 .pulsing {
-    animation: breathe 4s ease-in-out infinite;
-}
-
-@keyframes breathe {
-    0% { opacity: 0.3; transform: scale(0.9); }
-    50% { opacity: 1; transform: scale(1.1); }
-    100% { opacity: 0.3; transform: scale(0.9); }
+    opacity: 1; /* Animation removed */
 }
 
 .glass-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.005) 100%);
     backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-color);
-    border-radius: 24px;
+    border-radius: 12px; /* Sharper corners */
     padding: 2.5rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 body::before {
@@ -211,11 +204,10 @@ header {
 
 h1 {
     font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 0%, #64748b 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.03em;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
 }
 
 .subtitle {
@@ -289,20 +281,20 @@ label {
     width: 100%;
     padding: 1rem;
     background: var(--primary-color);
-    color: white;
+    color: #000000; /* Black text on Yellow button */
     border: none;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
-    background: #2563eb;
+    background: #ffffff;
+    transform: translateY(-1px);
 }
 
 /* KPI Grid */
