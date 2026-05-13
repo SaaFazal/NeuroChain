@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-color: #08080a;
-    --surface-color: rgba(255, 255, 255, 0.01);
-    --surface-hover: rgba(255, 255, 255, 0.03);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --primary-color: #facc15; /* Industrial Yellow */
-    --primary-glow: rgba(250, 204, 21, 0.1);
-    --success-color: #facc15;
-    --accent-color: #ffffff;
-    --text-primary: #ffffff;
-    --text-secondary: #71717a;
-    --glass-blur: blur(25px);
+    --bg-color: #f8fafc;
+    --surface-color: #ffffff;
+    --surface-hover: #f1f5f9;
+    --border-color: #e2e8f0;
+    --primary-color: #2563eb;
+    --primary-glow: rgba(37, 99, 235, 0.1);
+    --success-color: #059669;
+    --accent-color: #1e293b;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --glass-blur: blur(0px); /* Not needed in light mode */
 }
 
 * {
@@ -27,16 +27,11 @@ body {
 /* Background Visuals */
 body {
     background-color: var(--bg-color);
-    background-image: linear-gradient(rgba(10, 11, 16, 0.92), rgba(10, 11, 16, 0.92)), url('neurochain_command_center_bg.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
     color: var(--text-primary);
     font-family: 'Outfit', sans-serif;
     line-height: 1.6;
     min-height: 100vh;
     margin: 0;
-    overflow-x: hidden;
 }
 
 @media (max-width: 1024px) {
@@ -159,22 +154,19 @@ body {
 }
 
 .status-indicator {
-    width: 6px;
-    height: 6px;
-    border-radius: 2px; /* Square/Industrial */
-    background: var(--primary-color);
+    display: none; /* Removed technical dots */
 }
 
 .pulsing {
-    opacity: 1; /* Animation removed */
+    display: none;
 }
 
 .glass-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.005) 100%);
-    backdrop-filter: var(--glass-blur);
+    background: var(--surface-color);
     border: 1px solid var(--border-color);
-    border-radius: 12px; /* Sharper corners */
+    border-radius: 16px;
     padding: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     transition: all 0.3s ease;
 }
 
@@ -203,11 +195,10 @@ header {
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    color: #ffffff;
-    letter-spacing: -0.04em;
-    text-transform: uppercase;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -281,19 +272,17 @@ label {
     width: 100%;
     padding: 1rem;
     background: var(--primary-color);
-    color: #000000; /* Black text on Yellow button */
+    color: #ffffff;
     border: none;
-    border-radius: 4px;
-    font-weight: 800;
+    border-radius: 8px;
+    font-weight: 700;
     font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    background: #ffffff;
+    background: #1d4ed8;
     transform: translateY(-1px);
 }
 
