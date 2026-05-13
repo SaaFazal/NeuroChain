@@ -405,7 +405,6 @@ def forecast():
 
     forecast_df.to_csv(csv_path, index=False)
 
-    return render_template('result.html', 
     # 5. Render results back to the dashboard (index.html)
     return render_template(
         'index.html',
