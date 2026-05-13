@@ -28,6 +28,23 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+
+# Ensure tables and categories exist (Runs on both local and Render)
+with app.app_context():
+    db.create_all()
+    # Initialize default categories if they don't exist
+    from sqlalchemy import inspect
+    inspector = inspect(db.engine)
+    if 'category' in inspector.get_table_names():
+        from app import Category # Late import to avoid issues
+        try:
+            if not Category.query.first():
+                default_cats = ['Meat', 'Grocery', 'Dairy', 'Household', 'Beverages']
+                for cat_name in default_cats:
+                    db.session.add(Category(name=cat_name))
+                db.session.commit()
+        except:
+            pass # Avoid crash if table is still being created
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -402,12 +419,4 @@ def download():
     return send_file(path, as_attachment=True) if os.path.exists(path) else ("Not found", 404)
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        # Initialize default categories if they don't exist
-        if not Category.query.first():
-            default_cats = ['Meat', 'Grocery', 'Dairy', 'Household', 'Beverages']
-            for cat_name in default_cats:
-                db.session.add(Category(name=cat_name))
-            db.session.commit()
     app.run(debug=True, host='0.0.0.0')
