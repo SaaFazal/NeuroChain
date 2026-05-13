@@ -1,223 +1,291 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>RetailFlow | Inventory Intelligence</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "forest-deep": "#2D5A4C",
+                    "success-mint": "#EDF2F0",
+                    "linen-cream": "#E6E2D3",
+                    "primary": "#134235",
+                    "bone-white": "#F9F8F3",
+                    "background": "#fcf9f8",
+                    "secondary": "#605f53",
+                    "on-background": "#1c1b1b",
+                    "surface": "#fcf9f8"
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
 </head>
-<body>
-    <!-- Parallax Background Section -->
-    <div class="parallax-bg">
-        <video autoplay muted loop playsinline style="position: absolute; top: 15%; left: -10%; width: 120%; height: 120%;">
-            <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
-        </video>
-    </div>
-    <!-- This overlay fades as you scroll -->
-    <div id="scroll-overlay" class="overlay-fade" style="opacity: 0.85;"></div>
+<body class="bg-background text-on-background min-h-screen">
 
-    <div class="command-center">
-        <!-- Top Navigation (Solid White) -->
-        <header class="top-status-bar" style="background: #FFFFFF; border-bottom: 1px solid var(--border-color); position: sticky; top: 0;">
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div style="font-size: 1.2rem; cursor: pointer; color: var(--text-primary);">☰</div>
-                <div style="font-weight: 700; font-size: 1.5rem; letter-spacing: -0.04em;">
-                    <span style="color: var(--text-primary);">Retail</span><span style="color: var(--accent-color);">Flow</span>
-                </div>
-            </div>
-            <div style="display: flex; gap: 1.5rem; align-items: center;">
-                <div style="font-size: 1.1rem; color: var(--text-secondary); cursor: pointer;">🔍</div>
-                <div style="font-size: 1.1rem; color: #D6A84F; cursor: pointer;">🔔</div>
-                <div style="font-size: 1.1rem; color: var(--text-secondary); cursor: pointer;">⋮</div>
-            </div>
-        </header>
-
-        <!-- Main Dashboard Wrapper -->
-        <div class="dashboard-content">
-            <!-- Left Column: Intelligence & Reports -->
-            <main class="main-stage">
-                <div style="margin-bottom: 2rem;">
-                    <div style="color: var(--primary-color); font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;">Intelligence Dashboard</div>
-                    <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">Demand Forecast</h1>
-                </div>
-
-                <!-- Main Chart Card -->
-                <div class="glass-card">
-                    <h3 style="font-size: 1rem; margin-bottom: 2rem; color: var(--text-secondary);">Forecast Trajectory • {{ selected_shop.name if selected_shop else 'Primary Location' }}</h3>
-                    <div id="forecast-chart" style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center;">
-                        {% if graphJSON %}
-                            <div id="plotly-graph" style="width: 100%; height: 100%;"></div>
-                        {% else %}
-                            <div style="text-align: center; color: var(--text-secondary);">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
-                                <p style="font-weight: 500;">Run a forecast to reveal demand intelligence.</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Product Insights Grid -->
-                <div>
-                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem; font-weight: 700;">Product Insights</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
-                        <div class="kpi-card">
-                            <div style="font-size: 1.5rem; margin-bottom: 1rem;">🥩</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Top Category</div>
-                            <div style="font-size: 1.4rem; font-weight: 800; margin: 0.5rem 0;">{{ ai_advice[0].category if ai_advice else 'Meat' }}</div>
-                            <div style="font-size: 0.75rem; color: var(--success-color); font-weight: 700;">High Momentum</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div style="font-size: 1.5rem; margin-bottom: 1rem;">🛒</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Inventory Health</div>
-                            <div style="font-size: 1.4rem; font-weight: 800; margin: 0.5rem 0;">98.4%</div>
-                            <div style="font-size: 0.75rem; color: var(--success-color); font-weight: 700;">Optimal Range</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div style="font-size: 1.5rem; margin-bottom: 1rem;">⚡</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Confidence</div>
-                            <div style="font-size: 1.4rem; font-weight: 800; margin: 0.5rem 0;">95%</div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 700;">Statistically Valid</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Sales History -->
-                <div class="glass-card">
-                    <h3 style="font-size: 1rem; margin-bottom: 1.5rem; font-weight: 700;">Recent Sales History</h3>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Category</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for sale in history[:5] %}
-                                <tr>
-                                    <td style="font-weight: 500;">{{ sale.date }}</td>
-                                    <td>
-                                        <span style="background: var(--bg-color); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: var(--primary-color);">
-                                            {{ sale.category.name if sale.category else 'General' }}
-                                        </span>
-                                    </td>
-                                    <td style="font-weight: 700;">£{{ "%.2f"|format(sale.amount) }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
-
-            <!-- Right Column: Control Panel & Locations -->
-            <aside style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- Add Inventory Card -->
-                <div class="glass-card" style="padding: 2rem;">
-                    <h3 style="font-size: 1rem; margin-bottom: 1.5rem; font-weight: 700;">Add Inventory</h3>
-                    <form action="/forecast" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
-                        <input type="hidden" name="mode" id="input-mode" value="upload">
-
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-                            <button type="button" class="mode-btn active" id="btn-upload" onclick="switchMode('upload')">CSV</button>
-                            <button type="button" class="mode-btn" id="btn-manual" onclick="switchMode('manual')">MANUAL</button>
-                            <button type="button" class="mode-btn" id="btn-vision" onclick="switchMode('vision')">RECEIPT</button>
-                        </div>
-
-                        <div id="section-upload">
-                            <input type="file" name="file" style="width: 100%; font-size: 0.8rem; margin-bottom: 1.5rem;">
-                        </div>
-
-                        <div id="section-manual" style="display: none;">
-                            <select name="category_id" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                                {% for cat in categories %}
-                                <option value="{{ cat.id }}">{{ cat.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="number" step="0.01" name="amount" placeholder="Amount (£)" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                        </div>
-
-                        <div id="section-vision" style="display: none;">
-                            <div style="padding: 1.5rem; border: 2px dashed var(--border-color); border-radius: 15px; text-align: center; background: #fdfdfd; margin-bottom: 1.5rem;">
-                                <input type="file" name="receipt_image" id="receipt-upload" style="display: none;" onchange="showScanning()">
-                                <label for="receipt-upload" style="cursor: pointer;">
-                                    <div style="font-size: 1.5rem;">📷</div>
-                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-color);">Scan Receipt</div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-primary" style="width: 100%;">GENERATE FORECAST</button>
-                    </form>
-                </div>
-
-                <!-- Location Switcher -->
-                <div class="glass-card" style="padding: 2rem;">
-                    <h3 style="font-size: 1rem; margin-bottom: 1.5rem; font-weight: 700;">My Locations</h3>
-                    {% for shop in shops %}
-                    <a href="/?shop_id={{ shop.id }}" class="location-btn {% if selected_shop and selected_shop.id == shop.id %}active{% endif %}">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <div style="font-size: 1.1rem;">🏢</div>
-                            <div>
-                                <div style="font-size: 0.85rem;">{{ shop.name }}</div>
-                                <div style="font-size: 0.6rem; opacity: 0.8;">Verified Partner</div>
-                            </div>
-                        </div>
-                        <span>›</span>
-                    </a>
-                    {% endfor %}
-                </div>
-
-                <a href="/logout" style="text-align: center; color: var(--alert-color); text-decoration: none; font-size: 0.8rem; font-weight: 700;">LOG OUT OF RETAILFLOW</a>
-            </aside>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-linen-cream shadow-lg flex flex-col py-6 z-50">
+    <div class="px-6 py-4 flex items-center gap-3 mb-8">
+        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-sm">inventory_2</span>
+        </div>
+        <div>
+            <h1 class="font-bold text-xl text-primary">RetailFlow</h1>
+            <p class="text-[10px] text-secondary uppercase tracking-widest font-bold">Intelligence</p>
         </div>
     </div>
+    
+    <nav class="flex-1 px-4 space-y-2">
+        <a class="flex items-center gap-4 py-3 px-4 text-primary font-bold border-l-4 border-primary bg-white/50 rounded-r-lg" href="/">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="text-sm">Dashboard</span>
+        </a>
+        
+        <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-secondary uppercase tracking-widest">My Locations</div>
+        {% for shop in shops %}
+        <a class="flex items-center justify-between py-3 px-4 rounded-lg transition-all {% if selected_shop and selected_shop.id == shop.id %}bg-primary text-white shadow-md{% else %}text-secondary hover:bg-white/30{% endif %}" href="/?shop_id={{ shop.id }}">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-sm">location_on</span>
+                <span class="text-sm">{{ shop.name }}</span>
+            </div>
+            {% if selected_shop and selected_shop.id == shop.id %}
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+            {% endif %}
+        </a>
+        {% endfor %}
+    </nav>
 
-    <script>
-        // Parallax Scroll Reveal Logic
-        window.addEventListener('scroll', () => {
-            const scrollVal = window.scrollY;
-            const overlay = document.getElementById('scroll-overlay');
-            // Fade out overlay as we scroll (revealing the video)
-            const opacity = Math.max(0.3, 0.85 - (scrollVal / 600));
-            overlay.style.opacity = opacity;
+    <div class="px-6 mt-auto">
+        <a href="/logout" class="flex items-center gap-3 text-red-600 font-bold text-xs py-4 hover:opacity-80">
+            <span class="material-symbols-outlined text-sm">logout</span>
+            Sign Out
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="ml-64 min-h-screen flex flex-col">
+    <!-- Top Bar -->
+    <header class="flex justify-between items-center w-full px-12 h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-40">
+        <div class="flex items-center gap-8">
+            <h2 class="text-xl font-bold text-primary">{{ selected_shop.name }}</h2>
+            <div class="hidden md:flex gap-6">
+                <a class="text-primary border-b-2 border-primary pb-1 text-sm font-bold" href="#">Live View</a>
+                <a class="text-gray-400 hover:text-primary text-sm font-bold transition-all" href="#">Historical</a>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <button class="p-2 text-gray-400 hover:text-primary transition-all">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-linen-cream border border-gray-200 overflow-hidden">
+                <img src="https://ui-avatars.com/api/?name={{ current_user.username if current_user else 'User' }}&background=134235&color=fff" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <section class="p-12 space-y-8 flex-1">
+        
+        <!-- Action & Summary -->
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <p class="text-primary font-bold text-xs uppercase tracking-widest mb-1">Intelligence Dashboard</p>
+                <h1 class="text-4xl font-bold text-on-background">Demand Forecast</h1>
+            </div>
+            
+            <div class="flex gap-4">
+                <!-- Modal Trigger (Add Data) -->
+                <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg hover:brightness-110 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span>
+                    Feed Intelligence
+                </button>
+            </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Predicted Demand</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold text-primary">£{{ total_forecast if total_forecast else '0.00' }}</h3>
+                    <span class="bg-success-mint text-primary px-2 py-1 rounded-lg text-[10px] font-bold">Next 7 Days</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Historical Volume</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold text-secondary">£{{ total_historical if total_historical else '0.00' }}</h3>
+                    <span class="text-[10px] text-gray-400">Total processed</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">AI Confidence</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold text-on-background">94.2%</h3>
+                    <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chart -->
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="font-bold text-lg">Demand Trajectory</h3>
+                <div class="flex gap-2">
+                    <span class="flex items-center gap-2 text-xs text-gray-400"><span class="w-2 h-2 rounded-full bg-primary"></span> Forecast</span>
+                </div>
+            </div>
+            <div id="forecast-chart" class="w-full h-[400px] flex items-center justify-center">
+                {% if graphJSON %}
+                    <div id="plotly-graph" class="w-full h-full"></div>
+                {% else %}
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-4xl text-gray-200">show_chart</span>
+                        <p class="text-gray-400 text-sm mt-4">Feed intelligence to reveal trajectory</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Insights Table -->
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
+                <h3 class="font-bold text-lg">Product Insights</h3>
+                <span class="text-xs text-gray-400">Last 5 records</span>
+            </div>
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-gray-50/50">
+                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Date</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Category</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    {% for sale in history[:5] %}
+                    <tr class="hover:bg-gray-50/50 transition-all">
+                        <td class="px-8 py-4 text-sm font-medium">{{ sale.date }}</td>
+                        <td class="px-8 py-4">
+                            <span class="bg-linen-cream/30 text-primary px-3 py-1 rounded-full text-[10px] font-bold">{{ sale.category.name if sale.category else 'General' }}</span>
+                        </td>
+                        <td class="px-8 py-4 text-sm font-bold text-right">£{{ "%.2f"|format(sale.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+</main>
+
+<!-- Modal for Input (Intelligence Feed) -->
+<div id="input-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
+        <div class="bg-primary p-8 text-white flex justify-between items-center">
+            <div>
+                <h3 class="text-xl font-bold">Feed Intelligence</h3>
+                <p class="text-xs text-white/70">Update your inventory data</p>
+            </div>
+            <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="hover:bg-white/10 p-2 rounded-full">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <div class="p-8">
+            <form action="/forecast" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
+                <input type="hidden" name="mode" id="input-mode" value="upload">
+
+                <div class="flex gap-2 mb-8 bg-gray-50 p-1 rounded-xl">
+                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-white shadow-sm text-primary" id="btn-upload" onclick="switchMode('upload')">CSV</button>
+                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400" id="btn-manual" onclick="switchMode('manual')">MANUAL</button>
+                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400" id="btn-vision" onclick="switchMode('vision')">RECEIPT</button>
+                </div>
+
+                <div id="section-upload" class="mb-8">
+                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary transition-all">
+                        <input type="file" name="file" class="hidden" id="file-input">
+                        <label for="file-input" class="cursor-pointer">
+                            <span class="material-symbols-outlined text-4xl text-gray-200">cloud_upload</span>
+                            <p class="text-sm text-gray-400 mt-2">Drop CSV or Click to Browse</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="section-manual" class="hidden mb-8 space-y-4">
+                    <select name="category_id" class="w-full border-gray-200 rounded-xl text-sm p-3">
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-200 rounded-xl text-sm p-3">
+                </div>
+
+                <div id="section-vision" class="hidden mb-8 text-center">
+                    <div class="border-2 border-dashed border-primary/20 bg-primary/5 rounded-2xl p-8">
+                        <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()">
+                        <label for="receipt-upload" class="cursor-pointer">
+                            <span class="material-symbols-outlined text-4xl text-primary">camera_alt</span>
+                            <p class="text-sm text-primary font-bold mt-2">Scan Physical Receipt</p>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg hover:brightness-110 transition-all">
+                    PROCESS INTELLIGENCE
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    {% if graphJSON %}
+        var graph = {{ graphJSON | safe }};
+        Plotly.newPlot('plotly-graph', graph.data, graph.layout);
+    {% endif %}
+
+    function switchMode(mode) {
+        const upSec = document.getElementById('section-upload');
+        const manSec = document.getElementById('section-manual');
+        const visSec = document.getElementById('section-vision');
+        const modeIn = document.getElementById('input-mode');
+        
+        [upSec, manSec, visSec].forEach(s => s.classList.add('hidden'));
+        document.querySelectorAll('[id^="btn-"]').forEach(b => {
+            b.classList.remove('bg-white', 'shadow-sm', 'text-primary');
+            b.classList.add('text-gray-400');
         });
 
-        {% if graphJSON %}
-            var graph = {{ graphJSON | safe }};
-            Plotly.newPlot('plotly-graph', graph.data, graph.layout);
-        {% endif %}
+        const activeBtn = document.getElementById('btn-' + mode);
+        activeBtn.classList.remove('text-gray-400');
+        activeBtn.classList.add('bg-white', 'shadow-sm', 'text-primary');
 
-        function switchMode(mode) {
-            const upSec = document.getElementById('section-upload');
-            const manSec = document.getElementById('section-manual');
-            const visSec = document.getElementById('section-vision');
-            const modeIn = document.getElementById('input-mode');
-            
-            [upSec, manSec, visSec].forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-
-            if(mode === 'upload') {
-                upSec.style.display = 'block';
-                document.getElementById('btn-upload').classList.add('active');
-                modeIn.value = 'upload';
-            } else if(mode === 'manual') {
-                manSec.style.display = 'block';
-                document.getElementById('btn-manual').classList.add('active');
-                modeIn.value = 'manual';
-            } else {
-                visSec.style.display = 'block';
-                document.getElementById('btn-vision').classList.add('active');
-                modeIn.value = 'vision';
-            }
+        if(mode === 'upload') {
+            upSec.classList.remove('hidden');
+            modeIn.value = 'upload';
+        } else if(mode === 'manual') {
+            manSec.classList.remove('hidden');
+            modeIn.value = 'manual';
+        } else {
+            visSec.classList.remove('hidden');
+            modeIn.value = 'vision';
         }
-
-        function showScanning() {
-            setTimeout(() => { document.querySelector('form').submit(); }, 1000);
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
