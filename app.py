@@ -423,5 +423,46 @@ def download():
     path = os.path.join('static', 'latest_forecast.csv')
     return send_file(path, as_attachment=True) if os.path.exists(path) else ("Not found", 404)
 
+@app.route('/chat', methods=['POST'])
+@login_required
+def chat():
+    data = request.json
+    user_message = data.get('message')
+    
+    # 1. Retrieve Context (The "R" in RAG)
+    shops = Shop.query.filter_by(user_id=current_user.id).all()
+    # Get history for the first shop or a default
+    history = Sale.query.filter_by(shop_id=shops[0].id).order_by(Sale.date.desc()).limit(10).all() if shops else []
+    
+    context_str = "Recent Sales Data:\n"
+    for s in history:
+        context_str += f"- {s.date}: {s.category.name if s.category else 'General'}, £{s.amount}\n"
+    
+    # 2. Build the Augmented Prompt (The "A" in RAG)
+    prompt = f"""
+    You are the RetailFlow Strategy Assistant. Your goal is to help store managers optimize their inventory.
+    
+    CONTEXT DATA:
+    {context_str}
+    
+    USER QUESTION:
+    {user_message}
+    
+    INSTRUCTIONS:
+    - Use the context data provided to give specific advice.
+    - Be professional, concise, and business-focused.
+    - If you don't have enough data to answer, suggest what data the user should upload (CSV or Receipt).
+    - Stay within the Sage & Cream/Forest Deep brand identity (sophisticated and calm).
+    """
+    
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
+        ai_response = response.text.replace('*', '') # Clean up markdown
+        return jsonify({"response": ai_response})
+    except Exception as e:
+        print(f"Chat error: {e}")
+        return jsonify({"response": "I'm having trouble processing that right now. Please try again in a moment."})
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
