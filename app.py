@@ -15,11 +15,9 @@ from datetime import datetime
 import google.generativeai as genai
 
 import os
+import traceback
 
 app = Flask(__name__)
-
-# Configure Gemini
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 app.secret_key = 'neurochain_secret_key'
 
 # Database Configuration (Cloud + Local Fallback)
@@ -472,8 +470,9 @@ def chat():
     try:
         api_key = os.environ.get("GEMINI_API_KEY")
         if not api_key:
-            return jsonify({"response": "SYSTEM ERROR: Strategic AI Key (GEMINI_API_KEY) is missing from environment variables. Please add it to Render settings."})
+            return jsonify({"response": "SYSTEM ERROR: Strategic AI Key (GEMINI_API_KEY) is missing. Please add it to Render Environment Variables."})
             
+        # Initialize the engine locally for stability
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-1.5-flash')
         
@@ -481,11 +480,13 @@ def chat():
         ai_response = response.text.replace('*', '') # Clean up markdown
         
         if not ai_response:
-            return jsonify({"response": "The intelligence engine found the data but returned an empty strategy. Please try rephrasing."})
+            return jsonify({"response": "The intelligence engine processed the data but returned a blank strategy. Please try rephrasing your question."})
             
         return jsonify({"response": ai_response})
     except Exception as e:
-        print(f"Chat error: {e}")
+        # This will show the EXACT error in your Render logs
+        print("CRITICAL CHAT ERROR:")
+        print(traceback.format_exc())
         return jsonify({"response": f"INTELLIGENCE ERROR: {str(e)}"})
 
 if __name__ == '__main__':
