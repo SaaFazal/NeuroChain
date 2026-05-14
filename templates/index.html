@@ -27,15 +27,8 @@
       }
     </script>
     <style>
-        .growth-line {
-            stroke-dasharray: 2000;
-            stroke-dashoffset: 2000;
-            transition: stroke-dashoffset 0.1s linear;
-        }
-        .slogan-fade { 
-            opacity: 0;
-            animation: sloganCycle 12s infinite; 
-        }
+        .growth-line { stroke-dasharray: 2000; stroke-dashoffset: 2000; transition: stroke-dashoffset 0.1s linear; }
+        .slogan-fade { opacity: 0; animation: sloganCycle 12s infinite; }
         @keyframes sloganCycle {
             0%, 2%, 31%, 100% { opacity: 0; transform: translateY(10px); filter: blur(5px); }
             5%, 28% { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -101,22 +94,13 @@
             <div class="relative max-w-4xl mx-auto group">
                 <div class="absolute -inset-4 bg-gradient-to-tr from-gold/20 to-primary/20 blur-2xl opacity-30 group-hover:opacity-50 transition-all"></div>
                 <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white aspect-video bg-black">
-                    <!-- Slogan Overlays -->
                     <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
                         <div class="text-center">
-                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 0s;">
-                                <h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Eliminate Waste.</h2>
-                            </div>
-                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 4s;">
-                                <h2 class="text-gold text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Maximize Volume.</h2>
-                            </div>
-                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 8s;">
-                                <h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">CePTFlow Intelligence.</h2>
-                            </div>
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 0s;"><h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Eliminate Waste.</h2></div>
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 4s;"><h2 class="text-gold text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Maximize Volume.</h2></div>
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 8s;"><h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">CePTFlow Intelligence.</h2></div>
                         </div>
                     </div>
-
-                    <!-- Cropped Video -->
                     <video autoplay muted loop playsinline class="w-full h-full object-cover scale-[1.15] origin-top-left translate-y-[-5%] brightness-90">
                         <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
                     </video>
@@ -127,7 +111,10 @@
         <!-- Metrics Bento Grid -->
         <section class="space-y-8">
             <div class="flex justify-between items-end reveal-on-scroll">
-                <h2 class="text-2xl font-bold">Demand Intelligence</h2>
+                <div>
+                    <h2 class="text-2xl font-bold">Real-time Metrics</h2>
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Snapshot of {{ selected_shop.name }}</p>
+                </div>
                 <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl hover:brightness-110 transition-all flex items-center gap-2">
                     <span class="material-symbols-outlined">add</span> Feed Data
                 </button>
@@ -162,49 +149,90 @@
                 {% if graphJSON %}
                     <div id="plotly-graph" class="w-full h-full"></div>
                 {% else %}
-                    <!-- Ghost Graph Placeholder -->
                     <div class="w-full h-full flex flex-col items-center justify-center opacity-20 relative overflow-hidden">
-                        <svg class="w-full h-full absolute inset-0" viewBox="0 0 1000 500">
-                            <path d="M0,400 Q200,450 400,200 T800,300 T1000,100" stroke="#134235" stroke-width="4" fill="none" />
-                        </svg>
-                        <div class="z-10 text-center">
-                            <span class="material-symbols-outlined text-5xl">monitoring</span>
-                            <p class="text-sm font-bold mt-4">No live data fed to trajectory engine</p>
-                        </div>
+                        <svg class="w-full h-full absolute inset-0" viewBox="0 0 1000 500"><path d="M0,400 Q200,450 400,200 T800,300 T1000,100" stroke="#134235" stroke-width="4" fill="none" /></svg>
+                        <div class="z-10 text-center"><span class="material-symbols-outlined text-5xl">monitoring</span><p class="text-sm font-bold mt-4">No live data fed to trajectory engine</p></div>
                     </div>
                 {% endif %}
             </div>
         </section>
 
-        <!-- Strategy Assistant -->
-        <section class="max-w-4xl mx-auto reveal-on-scroll">
-            <div class="bg-primary rounded-[3rem] shadow-2xl overflow-hidden flex flex-col h-[600px]">
-                <div class="p-8 border-b border-white/10 flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
-                        <span class="material-symbols-outlined text-white">auto_awesome</span>
-                    </div>
+        <!-- Intelligence Vault (Historical Log) -->
+        <section class="reveal-on-scroll">
+            <div class="bg-white rounded-[3rem] shadow-sm border border-gray-50 overflow-hidden">
+                <div class="p-8 border-b border-gray-50 flex justify-between items-center">
                     <div>
-                        <h3 class="text-white font-bold text-lg">Strategy Assistant</h3>
-                        <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">RAG Enabled Intelligence</p>
+                        <h3 class="text-2xl font-bold">Intelligence Vault</h3>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Knowledge documents used for RAG</p>
+                    </div>
+                    <span class="text-xs font-bold text-primary bg-primary/5 px-4 py-2 rounded-full">{{ history|length }} Records</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gray-50/50">
+                                <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Entry Date</th>
+                                <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Category</th>
+                                <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Volume (£)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            {% for sale in history %}
+                            <tr class="hover:bg-bone/50 transition-all group">
+                                <td class="px-8 py-4 text-sm font-medium">{{ sale.date }}</td>
+                                <td class="px-8 py-4">
+                                    <span class="px-3 py-1 rounded-full bg-linen-cream/30 text-primary text-[10px] font-bold uppercase tracking-widest border border-primary/10">
+                                        {{ sale.category.name if sale.category else 'General' }}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-4 text-sm font-bold text-right text-charcoal group-hover:text-gold transition-colors">£{{ "%.2f"|format(sale.amount) }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="px-8 py-20 text-center text-gray-400 italic">No intelligence documents found in vault.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategy Assistant (The RAG Interface) -->
+        <section class="max-w-4xl mx-auto reveal-on-scroll">
+            <div class="bg-charcoal rounded-[3rem] shadow-2xl overflow-hidden flex flex-col h-[600px] border-b-8 border-gold">
+                <div class="p-8 border-b border-white/10 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gold/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                            <span class="material-symbols-outlined text-gold">auto_awesome</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Strategy Assistant</h3>
+                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Grounded in Vault Intelligence</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+                        <span class="text-[10px] text-white/70 font-bold uppercase tracking-widest">Active Insight</span>
                     </div>
                 </div>
                 
-                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4">
+                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4 bg-charcoal/50">
                     <div class="flex gap-4 max-w-[85%]">
                         <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-white text-sm">smart_toy</span>
                         </div>
-                        <div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">
-                            CePTFlow AI is ready to analyze your performance. How can I help you today?
+                        <div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">
+                            CePTFlow AI is grounded in your vault data. I can answer questions about your trends, stock levels, and historical performance based on the documents above. How can I help you today?
                         </div>
                     </div>
                 </div>
 
-                <div class="p-8 bg-white">
+                <div class="p-8 bg-bone">
                     <div class="flex gap-4">
-                        <input type="text" id="chat-input" placeholder="Query your inventory strategy..." class="flex-1 border-gray-100 rounded-2xl text-sm p-5 focus:ring-primary focus:border-primary">
-                        <button onclick="sendMessage()" class="bg-primary text-white px-8 rounded-2xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center">
-                            <span class="material-symbols-outlined">send</span>
+                        <input type="text" id="chat-input" placeholder="Query your strategic trajectory..." class="flex-1 border-gray-100 rounded-2xl text-sm p-5 focus:ring-primary focus:border-primary">
+                        <button onclick="sendMessage()" class="bg-charcoal text-white px-8 rounded-2xl shadow-lg hover:bg-black transition-all flex items-center justify-center">
+                            <span class="material-symbols-outlined text-gold">send</span>
                         </button>
                     </div>
                 </div>
@@ -213,27 +241,61 @@
 
     </main>
 
-    <!-- Modal for Input (Simplified) -->
-    <div id="input-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-md z-[1000] flex items-center justify-center p-6">
-        <div class="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden">
-            <div class="p-8 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold">Feed Data</h3>
+    <!-- Unified Intelligence Feed Modal (Multi-Mode) -->
+    <div id="input-modal" class="hidden fixed inset-0 bg-charcoal/60 backdrop-blur-md z-[1000] flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-bone/50">
+                <div>
+                    <h3 class="text-xl font-bold">Feed Intelligence</h3>
+                    <p class="text-xs text-gray-400 font-bold uppercase mt-1">Multi-mode data ingestion</p>
+                </div>
                 <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="p-2 text-gray-400 hover:text-charcoal transition-all">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
             
             <div class="p-8">
-                <form action="/forecast" method="post" enctype="multipart/form-data" class="space-y-8">
+                <div class="flex gap-2 mb-8 bg-gray-50 p-1 rounded-2xl">
+                    <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all bg-white shadow-sm text-primary" id="btn-upload" onclick="switchMode('upload')">CSV UPLOAD</button>
+                    <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all text-gray-400" id="btn-manual" onclick="switchMode('manual')">MANUAL ENTRY</button>
+                    <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all text-gray-400" id="btn-vision" onclick="switchMode('vision')">SCAN RECEIPT</button>
+                </div>
+
+                <form action="/forecast" method="post" enctype="multipart/form-data" class="space-y-6">
                     <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
-                    <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-dashed border-gray-200 text-center hover:border-primary transition-all">
-                        <input type="file" name="file" id="file-input" class="hidden">
-                        <label for="file-input" class="cursor-pointer">
-                            <span class="material-symbols-outlined text-4xl text-gray-300">cloud_upload</span>
-                            <p class="text-sm font-bold text-gray-400 mt-2">Upload Sales CSV</p>
-                        </label>
+                    <input type="hidden" name="mode" id="input-mode" value="upload">
+
+                    <div id="section-upload" class="space-y-4">
+                        <div class="bg-bone/30 p-12 rounded-[2rem] border-2 border-dashed border-gray-200 text-center hover:border-primary transition-all group">
+                            <input type="file" name="file" id="file-input" class="hidden">
+                            <label for="file-input" class="cursor-pointer">
+                                <span class="material-symbols-outlined text-5xl text-gray-300 group-hover:text-primary transition-colors">cloud_upload</span>
+                                <p class="text-sm font-bold text-gray-400 mt-3">Drop CSV or Click to Browse</p>
+                            </label>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full bg-primary text-white py-5 rounded-2xl font-bold shadow-lg">PROCESS INTELLIGENCE</button>
+
+                    <div id="section-manual" class="hidden space-y-4">
+                        <select name="category_id" class="w-full border-gray-100 rounded-2xl text-sm p-4 focus:ring-primary bg-gray-50">
+                            {% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}
+                        </select>
+                        <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-100 rounded-2xl text-sm p-4 focus:ring-primary bg-gray-50">
+                    </div>
+
+                    <div id="section-vision" class="hidden text-center space-y-4">
+                        <div class="bg-gold/5 p-12 rounded-[2rem] border-2 border-dashed border-gold/20 hover:bg-gold/10 transition-all">
+                            <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()">
+                            <label for="receipt-upload" class="cursor-pointer">
+                                <span class="material-symbols-outlined text-5xl text-gold">camera_alt</span>
+                                <p class="text-sm font-bold text-gold mt-3">Capture Physical Receipt</p>
+                            </label>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">AI Vision will categorize & extract volume</p>
+                    </div>
+
+                    <button type="submit" class="w-full bg-charcoal text-white py-5 rounded-[1.5rem] font-bold shadow-xl hover:brightness-110 active:scale-[0.98] transition-all">
+                        COMMENCE INGESTION
+                    </button>
                 </form>
             </div>
         </div>
@@ -244,12 +306,10 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // Growth Path Scroll Logic
         window.addEventListener('scroll', () => {
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             const path = document.getElementById('scroll-path');
-            const drawLength = 2000 * scrollPercent;
-            path.style.strokeDashoffset = 2000 - drawLength;
+            path.style.strokeDashoffset = 2000 - (2000 * scrollPercent);
         });
 
         const observer = new IntersectionObserver((entries) => {
@@ -262,22 +322,30 @@
             Plotly.newPlot('plotly-graph', graph.data, graph.layout);
         {% endif %}
 
+        function switchMode(mode) {
+            ['upload', 'manual', 'vision'].forEach(m => document.getElementById('section-' + m).classList.add('hidden'));
+            document.querySelectorAll('[id^="btn-"]').forEach(b => b.classList.remove('bg-white', 'shadow-sm', 'text-primary'));
+            document.getElementById('section-' + mode).classList.remove('hidden');
+            document.getElementById('btn-' + mode).classList.add('bg-white', 'shadow-sm', 'text-primary');
+            document.getElementById('input-mode').value = mode;
+        }
+
         async function sendMessage() {
             const input = document.getElementById('chat-input');
             const container = document.getElementById('chat-messages');
             const message = input.value.trim();
             if (!message) return;
-            container.innerHTML += `<div class="flex gap-4 max-w-[85%] ml-auto flex-row-reverse animate-fade-in"><div class="bg-white text-charcoal p-5 rounded-[1.5rem] rounded-tr-none shadow-sm text-sm border border-gray-100">${message}</div></div>`;
+            container.innerHTML += `<div class="flex gap-4 max-w-[85%] ml-auto flex-row-reverse animate-fade-in"><div class="bg-gold text-charcoal p-5 rounded-[1.5rem] rounded-tr-none shadow-sm text-sm border border-white/5 font-bold">${message}</div></div>`;
             input.value = '';
             container.scrollTop = container.scrollHeight;
             const loadingId = 'loading-' + Date.now();
-            container.innerHTML += `<div id="${loadingId}" class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 animate-pulse">Consulting intelligence...</div></div>`;
+            container.innerHTML += `<div id="${loadingId}" class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 animate-pulse">Scanning Vault Documents...</div></div>`;
             container.scrollTop = container.scrollHeight;
             try {
                 const response = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message }) });
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
-                container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">${data.response}</div></div>`;
+                container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">${data.response}</div></div>`;
             } catch (e) { document.getElementById(loadingId).remove(); }
             container.scrollTop = container.scrollHeight;
         }
