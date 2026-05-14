@@ -322,11 +322,24 @@
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const shopId = urlParams.get('shop_id') || "{{ selected_shop.id if selected_shop else '' }}";
-                const response = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message, shop_id: shopId }) });
+                const response = await fetch('/chat', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ 
+                        message: message,
+                        shop_id: shopId
+                    }) 
+                });
+                
+                if (!response.ok) throw new Error(`Server Response Error: ${response.status}`);
+                
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">${data.response}</div></div>`;
-            } catch (e) { document.getElementById(loadingId).remove(); }
+            } catch (e) { 
+                document.getElementById(loadingId).remove();
+                container.innerHTML += `<div class="flex gap-4 max-w-[85%]"><div class="bg-red-500/20 text-red-200 p-5 rounded-[1.5rem] text-sm border border-red-500/30">SYSTEM ALERT: ${e.message}</div></div>`;
+            }
             container.scrollTop = container.scrollHeight;
         }
 
