@@ -206,11 +206,15 @@
                         <div class="w-12 h-12 bg-gold/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                             <span class="material-symbols-outlined text-gold">auto_awesome</span>
                         </div>
-                    <div>
-                        <h3 class="text-white font-bold text-lg">Strategy Assistant</h3>
-                        <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Grounded in Vault Intelligence</p>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Strategy Assistant</h3>
+                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Grounded in Vault Intelligence</p>
+                        </div>
                     </div>
-                </div>
+                    <button onclick="clearChat()" class="p-3 text-white/30 hover:text-gold transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-white/50">Reset Strategy</span>
+                    </button>
                 </div>
                 
                 <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4 bg-charcoal/50">
@@ -241,57 +245,35 @@
     <div id="input-modal" class="hidden fixed inset-0 bg-charcoal/60 backdrop-blur-md z-[1000] flex items-center justify-center p-6">
         <div class="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-fade-in">
             <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-bone/50">
-                <div>
-                    <h3 class="text-xl font-bold">Feed Intelligence</h3>
-                    <p class="text-xs text-gray-400 font-bold uppercase mt-1">Multi-mode data ingestion</p>
-                </div>
-                <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="p-2 text-gray-400 hover:text-charcoal transition-all">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+                <div><h3 class="text-xl font-bold">Feed Intelligence</h3><p class="text-xs text-gray-400 font-bold uppercase mt-1">Multi-mode data ingestion</p></div>
+                <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="p-2 text-gray-400 hover:text-charcoal transition-all"><span class="material-symbols-outlined">close</span></button>
             </div>
-            
             <div class="p-8">
                 <div class="flex gap-2 mb-8 bg-gray-50 p-1 rounded-2xl">
                     <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all bg-white shadow-sm text-primary" id="btn-upload" onclick="switchMode('upload')">CSV UPLOAD</button>
                     <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all text-gray-400" id="btn-manual" onclick="switchMode('manual')">MANUAL ENTRY</button>
                     <button type="button" class="flex-1 py-3 rounded-xl text-xs font-bold transition-all text-gray-400" id="btn-vision" onclick="switchMode('vision')">SCAN RECEIPT</button>
                 </div>
-
                 <form action="/forecast" method="post" enctype="multipart/form-data" class="space-y-6">
                     <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
                     <input type="hidden" name="mode" id="input-mode" value="upload">
-
                     <div id="section-upload" class="space-y-4">
                         <div class="bg-bone/30 p-12 rounded-[2rem] border-2 border-dashed border-gray-200 text-center hover:border-primary transition-all group">
-                            <input type="file" name="file" id="file-input" class="hidden">
-                            <label for="file-input" class="cursor-pointer">
-                                <span class="material-symbols-outlined text-5xl text-gray-300 group-hover:text-primary transition-colors">cloud_upload</span>
-                                <p class="text-sm font-bold text-gray-400 mt-3">Drop CSV or Click to Browse</p>
-                            </label>
+                            <input type="file" name="file" id="file-input" class="hidden"><label for="file-input" class="cursor-pointer"><span class="material-symbols-outlined text-5xl text-gray-300 group-hover:text-primary transition-colors">cloud_upload</span><p class="text-sm font-bold text-gray-400 mt-3">Drop CSV or Click to Browse</p></label>
                         </div>
                     </div>
-
                     <div id="section-manual" class="hidden space-y-4">
                         <select name="category_id" class="w-full border-gray-100 rounded-2xl text-sm p-4 focus:ring-primary bg-gray-50">
                             {% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}
                         </select>
                         <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-100 rounded-2xl text-sm p-4 focus:ring-primary bg-gray-50">
                     </div>
-
                     <div id="section-vision" class="hidden text-center space-y-4">
                         <div class="bg-gold/5 p-12 rounded-[2rem] border-2 border-dashed border-gold/20 hover:bg-gold/10 transition-all">
-                            <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()">
-                            <label for="receipt-upload" class="cursor-pointer">
-                                <span class="material-symbols-outlined text-5xl text-gold">camera_alt</span>
-                                <p class="text-sm font-bold text-gold mt-3">Capture Physical Receipt</p>
-                            </label>
+                            <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()"><label for="receipt-upload" class="cursor-pointer"><span class="material-symbols-outlined text-5xl text-gold">camera_alt</span><p class="text-sm font-bold text-gold mt-3">Capture Physical Receipt</p></label>
                         </div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">AI Vision will categorize & extract volume</p>
                     </div>
-
-                    <button type="submit" class="w-full bg-charcoal text-white py-5 rounded-[1.5rem] font-bold shadow-xl hover:brightness-110 active:scale-[0.98] transition-all">
-                        COMMENCE INGESTION
-                    </button>
+                    <button type="submit" class="w-full bg-charcoal text-white py-5 rounded-[1.5rem] font-bold shadow-xl hover:brightness-110 active:scale-[0.98] transition-all">COMMENCE INGESTION</button>
                 </form>
             </div>
         </div>
@@ -340,21 +322,29 @@
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const shopId = urlParams.get('shop_id') || "{{ selected_shop.id if selected_shop else '' }}";
-
-                const response = await fetch('/chat', { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ 
-                        message: message,
-                        shop_id: shopId
-                    }) 
-                });
+                const response = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message, shop_id: shopId }) });
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">${data.response}</div></div>`;
             } catch (e) { document.getElementById(loadingId).remove(); }
             container.scrollTop = container.scrollHeight;
         }
+
+        function clearChat() {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = `
+                <div class="flex gap-4 max-w-[85%]">
+                    <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+                    </div>
+                    <div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">
+                        CePTFlow AI is grounded in your vault data. I can answer questions about your trends, stock levels, and historical performance based on the documents above. How can I help you today?
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
     </script>
 </body>
 </html>

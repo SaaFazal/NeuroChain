@@ -12,10 +12,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+import google.generativeai as genai
 
 import os
 
 app = Flask(__name__)
+
+# Configure Gemini
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 app.secret_key = 'neurochain_secret_key'
 
 # Database Configuration (Cloud + Local Fallback)
