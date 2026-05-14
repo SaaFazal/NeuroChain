@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for, flash
+from flask import Flask, render_template, request, send_file, redirect, url_for, flash, jsonify
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.holtwinters import Holt
