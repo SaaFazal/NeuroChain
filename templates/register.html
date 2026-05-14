@@ -7,45 +7,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; background-color: #E6DFD1; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        body { font-family: 'Outfit', sans-serif; background-color: #F9F8F3; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid white; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
-    <!-- Background Video (Cropped) -->
-    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-[-2] brightness-75 scale-[1.15] origin-top-left translate-y-[-2%]">
-        <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
-    </video>
-    <div class="fixed inset-0 bg-[#E6DFD1]/40 z-[-1]"></div>
-
-    <div class="w-full max-w-md glass-card rounded-[2rem] p-10 shadow-2xl animate-fade-in">
+<body class="min-h-screen flex items-center justify-center p-6 bg-[#E6DFD1]">
+    <div class="w-full max-w-md glass-card rounded-[2.5rem] p-12 shadow-xl animate-fade-in">
         <div class="text-center mb-10">
-            <h1 class="text-3xl font-bold tracking-tighter">
-                <span class="text-[#1F2933]">Initialize</span> <span class="text-[#D6A84F]">Account</span>
+            <h1 class="text-4xl font-bold tracking-tighter">
+                <span class="text-[#1F2933]">Retail</span><span class="text-[#D6A84F]">Flow</span>
             </h1>
-            <p class="text-gray-500 text-sm mt-2 font-medium">Join the RetailFlow Intelligence Network</p>
+            <p class="text-[#134235] text-[10px] font-bold uppercase tracking-[0.3em] mt-3">Join the Intelligence Network</p>
         </div>
 
         <form action="{{ url_for('register') }}" method="post" class="space-y-6">
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Username</label>
-                <input type="text" name="username" placeholder="Choose a manager ID" class="w-full bg-white/50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Manager Username</label>
+                <input type="text" name="username" placeholder="Choose a manager ID" class="w-full bg-white border-gray-100 rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Password</label>
-                <input type="password" name="password" placeholder="••••••••" class="w-full bg-white/50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Password</label>
+                <input type="password" name="password" placeholder="••••••••" class="w-full bg-white border-gray-100 rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Location Name</label>
-                <input type="text" name="shop_name" placeholder="e.g. Ushop Nottingham" class="w-full bg-white/50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Store Name</label>
+                <input type="text" name="shop_name" placeholder="e.g. Ushop Nottingham" class="w-full bg-white border-gray-100 rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
             </div>
             <button type="submit" class="w-full bg-[#134235] text-white py-4 rounded-xl font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all">
-                CREATE NETWORK NODE
+                INITIALIZE ACCOUNT
             </button>
         </form>
 
-        <div class="mt-10 text-center text-sm">
-            <span class="text-gray-500">Already registered?</span>
+        <div class="mt-10 text-center text-xs">
+            <span class="text-gray-400 font-medium">Already registered?</span>
             <a href="{{ url_for('login') }}" class="text-[#134235] font-bold ml-1 hover:underline">Sign In</a>
         </div>
     </div>

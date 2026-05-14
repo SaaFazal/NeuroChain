@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- Lenis Smooth Scroll -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script id="tailwind-config">
@@ -17,421 +16,265 @@
         theme: {
           extend: {
             "colors": {
-                    "forest-deep": "#2D5A4C",
-                    "success-mint": "#EDF2F0",
-                    "linen-cream": "#E6E2D3",
                     "primary": "#134235",
-                    "bone-white": "#F9F8F3",
-                    "background": "#fcf9f8",
-                    "secondary": "#605f53",
-                    "on-background": "#1c1b1b",
-                    "surface": "#fcf9f8"
+                    "linen-cream": "#E6DFD1",
+                    "charcoal": "#1F2933",
+                    "gold": "#D6A84F",
+                    "bone": "#F9F8F3"
             }
           }
         }
       }
     </script>
 </head>
-<body class="bg-[#E6DFD1] text-on-background min-h-screen">
+<body class="bg-bone text-charcoal min-h-screen">
 
-    <!-- Parallax Background Section -->
-    <div class="fixed inset-0 z-[-2] overflow-hidden">
-        <video autoplay muted loop playsinline class="w-full h-full object-cover brightness-75 scale-[1.15] origin-top-left translate-y-[-2%]">
-            <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
-        </video>
+    <!-- Scroll-Linked Background Graph -->
+    <div id="ghost-graph" class="fixed inset-0 z-[-1] opacity-5 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,500 Q250,200 500,500 T1000,500" stroke="#134235" stroke-width="2" fill="none" class="animate-pulse" />
+            <path d="M0,600 Q250,300 500,600 T1000,600" stroke="#134235" stroke-width="2" fill="none" opacity="0.5" />
+        </svg>
     </div>
-    <!-- This overlay fades as you scroll -->
-    <div id="scroll-overlay" class="fixed inset-0 z-[-1] bg-[#E6DFD1]/60 transition-opacity duration-500"></div>
 
-<!-- SideNavBar -->
-<aside class="h-screen w-64 fixed left-0 top-0 bg-[#E6DFD1]/80 backdrop-blur-xl shadow-lg flex flex-col py-6 z-50 border-r border-white/20">
-    <div class="px-6 py-4 flex items-center gap-3 mb-8">
-        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg">
-            <span class="material-symbols-outlined text-white text-lg">inventory_2</span>
-        </div>
-        <div>
-            <h1 class="font-bold text-xl tracking-tighter">
-                <span class="text-[#1F2933]">Retail</span><span class="text-[#D6A84F]">Flow</span>
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 w-full h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-[100] flex items-center justify-between px-12">
+        <div class="flex items-center gap-12">
+            <h1 class="text-2xl font-bold tracking-tighter">
+                <span class="text-charcoal">Retail</span><span class="text-gold">Flow</span>
             </h1>
-            <p class="text-[10px] text-secondary uppercase tracking-widest font-bold">Intelligence</p>
-        </div>
-    </div>
-    
-    <nav class="flex-1 px-4 space-y-2">
-        <a class="flex items-center gap-4 py-3 px-4 text-primary font-bold border-l-4 border-primary bg-white/50 rounded-r-lg" href="/">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="text-sm">Dashboard</span>
-        </a>
-        
-        <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-secondary uppercase tracking-widest">My Locations</div>
-        {% for shop in shops %}
-        <a class="flex items-center justify-between py-3 px-4 rounded-lg transition-all {% if selected_shop and selected_shop.id == shop.id %}bg-primary text-white shadow-md{% else %}text-secondary hover:bg-white/30{% endif %}" href="/?shop_id={{ shop.id }}">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-sm">location_on</span>
-                <span class="text-sm">{{ shop.name }}</span>
-            </div>
-            {% if selected_shop and selected_shop.id == shop.id %}
-            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-            {% endif %}
-        </a>
-        {% endfor %}
-    </nav>
-
-    <div class="px-6 mt-auto">
-        <a href="/logout" class="flex items-center gap-3 text-red-600 font-bold text-xs py-4 hover:opacity-80">
-            <span class="material-symbols-outlined text-sm">logout</span>
-            Sign Out
-        </a>
-    </div>
-</aside>
-
-<!-- Main Content -->
-<main class="ml-64 min-h-screen flex flex-col">
-    <!-- Top Bar -->
-    <header class="flex justify-between items-center w-full px-12 h-20 bg-white/60 backdrop-blur-xl border-b border-white/20 sticky top-0 z-40">
-        <div class="flex items-center gap-8">
-            <h2 class="text-xl font-bold text-primary">{{ selected_shop.name }}</h2>
-            <div class="hidden md:flex gap-6">
-                <a class="text-primary border-b-2 border-primary pb-1 text-sm font-bold" href="#">Live View</a>
-                <a class="text-gray-400 hover:text-primary text-sm font-bold transition-all" href="#">Historical</a>
+            <div class="hidden md:flex gap-8">
+                <a href="/" class="text-primary font-bold text-sm border-b-2 border-primary pb-1">Dashboard</a>
+                <div class="relative group">
+                    <button class="text-secondary hover:text-primary text-sm font-bold flex items-center gap-1">
+                        Locations <span class="material-symbols-outlined text-xs">expand_more</span>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-48 bg-white shadow-xl rounded-xl border border-gray-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2">
+                        {% for shop in shops %}
+                        <a href="/?shop_id={{ shop.id }}" class="block px-4 py-2 text-xs font-bold text-secondary hover:bg-linen-cream/30 hover:text-primary">
+                            {{ shop.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="flex items-center gap-6">
-            <button class="p-2 text-gray-400 hover:text-primary transition-all">
-                <span class="material-symbols-outlined">notifications</span>
-            </button>
-            <div class="w-10 h-10 rounded-full bg-linen-cream border border-gray-200 overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name={{ current_user.username if current_user else 'User' }}&background=134235&color=fff" class="w-full h-full object-cover">
-            </div>
+            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ selected_shop.name }}</span>
+            <a href="/logout" class="text-red-600 font-bold text-xs hover:opacity-80 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">logout</span> Sign Out
+            </a>
         </div>
-    </header>
+    </nav>
 
-    <!-- Content -->
-    <section class="p-12 space-y-12 flex-1">
+    <!-- Main Hero Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12 space-y-24">
         
-        <!-- Action & Summary -->
-        <div class="flex justify-between items-end mb-8 reveal-on-scroll">
-            <div>
-                <p class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Intelligence Dashboard</p>
-                <h1 class="text-4xl font-bold text-on-background">Demand Forecast</h1>
+        <!-- TV Hero Section -->
+        <section class="text-center space-y-12 reveal-on-scroll">
+            <div class="space-y-4">
+                <p class="text-primary font-bold text-[10px] uppercase tracking-[0.4em]">Strategic Intelligence</p>
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-charcoal">
+                    Tired of inventory <span class="text-gold italic">waste?</span>
+                </h1>
+                <p class="text-secondary max-w-2xl mx-auto text-lg font-medium opacity-70">
+                    RetailFlow turns your sales data into actionable demand trajectory.
+                </p>
             </div>
-            
-            <div class="flex gap-4">
-                <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined">add</span>
-                    Feed Intelligence
+
+            <!-- TV Framed Video -->
+            <div class="relative max-w-4xl mx-auto group">
+                <div class="absolute -inset-4 bg-gradient-to-tr from-gold/20 to-primary/20 blur-2xl opacity-30 group-hover:opacity-50 transition-all"></div>
+                <div class="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white aspect-video bg-black">
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                        <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Bento Grid -->
+        <section class="space-y-8">
+            <div class="flex justify-between items-end reveal-on-scroll">
+                <h2 class="text-2xl font-bold">Demand Intelligence</h2>
+                <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl hover:brightness-110 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined">add</span> Feed Data
                 </button>
             </div>
-        </div>
 
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50 reveal-on-scroll reveal-delay-1 hover-lift">
-                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">Predicted Demand</p>
-                <div class="flex items-end justify-between">
-                    <h3 class="text-3xl font-bold text-primary">£{{ total_forecast if total_forecast else '0.00' }}</h3>
-                    <span class="bg-success-mint text-primary px-2 py-1 rounded-lg text-[10px] font-bold">Next 7 Days</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 hover-lift reveal-on-scroll reveal-delay-1">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Predicted Demand</p>
+                    <h3 class="text-4xl font-bold text-primary">£{{ total_forecast if total_forecast else '0.00' }}</h3>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 hover-lift reveal-on-scroll reveal-delay-2">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Historical Volume</p>
+                    <h3 class="text-4xl font-bold text-charcoal">£{{ total_historical if total_historical else '0.00' }}</h3>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 hover-lift reveal-on-scroll reveal-delay-3">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">AI Confidence</p>
+                    <h3 class="text-4xl font-bold text-gold">94.2%</h3>
                 </div>
             </div>
-            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50 reveal-on-scroll reveal-delay-2 hover-lift">
-                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">Historical Volume</p>
-                <div class="flex items-end justify-between">
-                    <h3 class="text-3xl font-bold text-secondary">£{{ total_historical if total_historical else '0.00' }}</h3>
-                    <span class="text-[10px] text-gray-400">Total processed</span>
-                </div>
-            </div>
-            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50 reveal-on-scroll reveal-delay-3 hover-lift">
-                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">AI Confidence</p>
-                <div class="flex items-end justify-between">
-                    <h3 class="text-3xl font-bold text-on-background">94.2%</h3>
-                    <span class="material-symbols-outlined text-primary">auto_awesome</span>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Main Chart -->
-        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[2rem] shadow-sm border border-white/50 reveal-on-scroll">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="font-bold text-lg">Demand Trajectory</h3>
-                <div class="flex gap-2">
-                    <span class="flex items-center gap-2 text-xs text-gray-400"><span class="w-2 h-2 rounded-full bg-primary"></span> Forecast</span>
+        <!-- Main Chart Section -->
+        <section class="bg-white p-12 rounded-[3rem] shadow-sm border border-gray-50 reveal-on-scroll">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold">Demand Trajectory</h3>
+                    <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">Live AI Analysis</p>
                 </div>
             </div>
-            <div id="forecast-chart" class="w-full h-[400px] flex items-center justify-center">
+            
+            <div id="forecast-chart" class="w-full h-[500px]">
                 {% if graphJSON %}
                     <div id="plotly-graph" class="w-full h-full"></div>
                 {% else %}
-                    <div class="text-center">
-                        <span class="material-symbols-outlined text-4xl text-gray-200">show_chart</span>
-                        <p class="text-gray-400 text-sm mt-4">Feed intelligence to reveal trajectory</p>
+                    <!-- Ghost Graph Placeholder -->
+                    <div class="w-full h-full flex flex-col items-center justify-center opacity-20 relative overflow-hidden">
+                        <svg class="w-full h-full absolute inset-0" viewBox="0 0 1000 500">
+                            <path d="M0,400 Q200,450 400,200 T800,300 T1000,100" stroke="#134235" stroke-width="4" fill="none" />
+                        </svg>
+                        <div class="z-10 text-center">
+                            <span class="material-symbols-outlined text-5xl">monitoring</span>
+                            <p class="text-sm font-bold mt-4">No live data fed to trajectory engine</p>
+                        </div>
                     </div>
                 {% endif %}
             </div>
-        </div>
+        </section>
 
-        <!-- Product Insights Table -->
-        <div class="bg-white/90 backdrop-blur-sm rounded-[2rem] shadow-sm border border-white/50 overflow-hidden reveal-on-scroll">
-            <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
-                <h3 class="font-bold text-lg">Product Insights</h3>
-                <span class="text-xs text-gray-400">Last 5 records</span>
-            </div>
-            <table class="w-full text-left">
-                <thead>
-                    <tr class="bg-gray-50/30">
-                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Date</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Category</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest text-right">Amount</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                    {% for sale in history[:5] %}
-                    <tr class="hover:bg-gray-50/50 transition-all">
-                        <td class="px-8 py-4 text-sm font-medium">{{ sale.date }}</td>
-                        <td class="px-8 py-4">
-                            <span class="bg-linen-cream/30 text-primary px-3 py-1 rounded-full text-[10px] font-bold">{{ sale.category.name if sale.category else 'General' }}</span>
-                        </td>
-                        <td class="px-8 py-4 text-sm font-bold text-right">£{{ "%.2f"|format(sale.amount) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- AI Strategy Assistant (RAG Ready) -->
-        <div class="mt-8 reveal-on-scroll">
-            <div class="bg-white/90 backdrop-blur-sm rounded-[2rem] shadow-sm border border-white/50 overflow-hidden flex flex-col h-[500px]">
-                <div class="bg-primary p-6 text-white flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                            <span class="material-symbols-outlined text-white">auto_awesome</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm">Strategy Assistant</h3>
-                            <p class="text-[10px] text-white/70 uppercase tracking-widest font-bold">Powered by RAG Intelligence</p>
-                        </div>
+        <!-- Strategy Assistant -->
+        <section class="max-w-4xl mx-auto reveal-on-scroll">
+            <div class="bg-primary rounded-[3rem] shadow-2xl overflow-hidden flex flex-col h-[600px]">
+                <div class="p-8 border-b border-white/10 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                        <span class="material-symbols-outlined text-white">auto_awesome</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-lg">Strategy Assistant</h3>
+                        <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">RAG Enabled Intelligence</p>
                     </div>
                 </div>
                 
-                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4 bg-gray-50/30">
-                    <div class="flex gap-3 max-w-[80%]">
-                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4">
+                    <div class="flex gap-4 max-w-[85%]">
+                        <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-white text-sm">smart_toy</span>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-secondary">
-                            Hello! I have analyzed your recent sales and demand trajectory. How can I help you optimize your inventory strategy today?
+                        <div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">
+                            Ready to analyze your store performance. What strategic decisions are you facing today?
                         </div>
                     </div>
                 </div>
 
-                <div class="p-6 border-t border-gray-50 bg-white">
-                    <div class="flex gap-3">
-                        <input type="text" id="chat-input" placeholder="Ask about your stock, trends, or strategy..." class="flex-1 border-gray-100 rounded-2xl text-sm p-4 focus:ring-primary focus:border-primary">
-                        <button onclick="sendMessage()" class="bg-primary text-white p-4 rounded-2xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center">
+                <div class="p-8 bg-white">
+                    <div class="flex gap-4">
+                        <input type="text" id="chat-input" placeholder="Query your inventory strategy..." class="flex-1 border-gray-100 rounded-2xl text-sm p-5 focus:ring-primary focus:border-primary">
+                        <button onclick="sendMessage()" class="bg-primary text-white px-8 rounded-2xl shadow-lg hover:brightness-110 transition-all flex items-center justify-center">
                             <span class="material-symbols-outlined">send</span>
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </section>
-</main>
+    </main>
 
-<!-- Modal for Input -->
-<div id="input-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
-    <div class="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
-        <div class="bg-primary p-8 text-white flex justify-between items-center">
-            <div>
-                <h3 class="text-xl font-bold">Feed Intelligence</h3>
-                <p class="text-xs text-white/70">Update your inventory data</p>
-            </div>
-            <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="hover:bg-white/10 p-2 rounded-full transition-all">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        
-        <div class="p-8">
-            <form action="/forecast" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
-                <input type="hidden" name="mode" id="input-mode" value="upload">
-
-                <div class="flex gap-2 mb-8 bg-gray-50 p-1 rounded-xl">
-                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-white shadow-sm text-primary" id="btn-upload" onclick="switchMode('upload')">CSV</button>
-                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400" id="btn-manual" onclick="switchMode('manual')">MANUAL</button>
-                    <button type="button" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400" id="btn-vision" onclick="switchMode('vision')">RECEIPT</button>
-                </div>
-
-                <div id="section-upload" class="mb-8">
-                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary transition-all group">
-                        <input type="file" name="file" class="hidden" id="file-input">
-                        <label for="file-input" class="cursor-pointer">
-                            <span class="material-symbols-outlined text-4xl text-gray-200 group-hover:text-primary transition-colors">cloud_upload</span>
-                            <p class="text-sm text-gray-400 mt-2">Drop CSV or Click to Browse</p>
-                        </label>
-                    </div>
-                </div>
-
-                <div id="section-manual" class="hidden mb-8 space-y-4">
-                    <select name="category_id" class="w-full border-gray-200 rounded-xl text-sm p-4 focus:ring-primary">
-                        {% for cat in categories %}
-                        <option value="{{ cat.id }}">{{ cat.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-200 rounded-xl text-sm p-4 focus:ring-primary">
-                </div>
-
-                <div id="section-vision" class="hidden mb-8 text-center">
-                    <div class="border-2 border-dashed border-primary/20 bg-primary/5 rounded-2xl p-8 hover:bg-primary/10 transition-all cursor-pointer">
-                        <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()">
-                        <label for="receipt-upload" class="cursor-pointer">
-                            <span class="material-symbols-outlined text-4xl text-primary">camera_alt</span>
-                            <p class="text-sm text-primary font-bold mt-2">Scan Physical Receipt</p>
-                        </label>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all">
-                    PROCESS INTELLIGENCE
+    <!-- Modal for Input (Simplified) -->
+    <div id="input-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-md z-[1000] flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div class="p-8 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold">Feed Data</h3>
+                <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="p-2 text-gray-400 hover:text-charcoal transition-all">
+                    <span class="material-symbols-outlined">close</span>
                 </button>
-            </form>
+            </div>
+            
+            <div class="p-8">
+                <form action="/forecast" method="post" enctype="multipart/form-data" class="space-y-8">
+                    <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
+                    
+                    <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-dashed border-gray-200 text-center hover:border-primary transition-all">
+                        <input type="file" name="file" id="file-input" class="hidden">
+                        <label for="file-input" class="cursor-pointer">
+                            <span class="material-symbols-outlined text-4xl text-gray-300">cloud_upload</span>
+                            <p class="text-sm font-bold text-gray-400 mt-2">Upload Sales CSV</p>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-white py-5 rounded-2xl font-bold shadow-lg">
+                        PROCESS INTELLIGENCE
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // 1. Lenis Smooth Scroll Initialization
-    const lenis = new Lenis({
-        duration: 1.4,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        orientation: 'vertical'
-    });
+    <script>
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true
+        });
 
-    function raf(time) {
-        lenis.raf(time);
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
-    // 2. Reveal on Scroll Logic
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-            }
+        // Ghost Graph Parallax
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            document.getElementById('ghost-graph').style.transform = `translateY(${scroll * 0.15}px)`;
         });
-    }, observerOptions);
 
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-
-    // Parallax Logic
-    window.addEventListener('scroll', () => {
-        const scrollVal = window.scrollY;
-        const overlay = document.getElementById('scroll-overlay');
-        const opacity = Math.max(0.3, 0.6 - (scrollVal / 600));
-        overlay.style.opacity = opacity;
-    });
-
-    {% if graphJSON %}
-        var graph = {{ graphJSON | safe }};
-        Plotly.newPlot('plotly-graph', graph.data, graph.layout);
-    {% endif %}
-
-    async function sendMessage() {
-        const input = document.getElementById('chat-input');
-        const container = document.getElementById('chat-messages');
-        const message = input.value.trim();
-        
-        if (!message) return;
-
-        // User Message
-        container.innerHTML += `
-            <div class="flex gap-3 max-w-[80%] ml-auto flex-row-reverse">
-                <div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm">
-                    ${message}
-                </div>
-            </div>
-        `;
-        input.value = '';
-        container.scrollTop = container.scrollHeight;
-
-        // Bot Response (Loading)
-        const loadingId = 'loading-' + Date.now();
-        container.innerHTML += `
-            <div id="${loadingId}" class="flex gap-3 max-w-[80%]">
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                </div>
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-secondary animate-pulse">
-                    Analyzing your data...
-                </div>
-            </div>
-        `;
-        container.scrollTop = container.scrollHeight;
-
-        try {
-            const response = await fetch('/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
             });
-            const data = await response.json();
-            
-            document.getElementById(loadingId).remove();
-            container.innerHTML += `
-                <div class="flex gap-3 max-w-[80%]">
-                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-on-background">
-                        ${data.response}
-                    </div>
-                </div>
-            `;
-        } catch (error) {
-            document.getElementById(loadingId).remove();
-            console.error('Chat error:', error);
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+        {% if graphJSON %}
+            var graph = {{ graphJSON | safe }};
+            Plotly.newPlot('plotly-graph', graph.data, graph.layout);
+        {% endif %}
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const container = document.getElementById('chat-messages');
+            const message = input.value.trim();
+            if (!message) return;
+
+            container.innerHTML += `<div class="flex gap-4 max-w-[85%] ml-auto flex-row-reverse animate-fade-in"><div class="bg-white text-charcoal p-5 rounded-[1.5rem] rounded-tr-none shadow-sm text-sm border border-gray-100">${message}</div></div>`;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            const loadingId = 'loading-' + Date.now();
+            container.innerHTML += `<div id="${loadingId}" class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 animate-pulse">Consulting intelligence...</div></div>`;
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+                container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">${data.response}</div></div>`;
+            } catch (e) {
+                document.getElementById(loadingId).remove();
+            }
+            container.scrollTop = container.scrollHeight;
         }
-        container.scrollTop = container.scrollHeight;
-    }
 
-    document.getElementById('chat-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') sendMessage();
-    });
-
-    function switchMode(mode) {
-        const upSec = document.getElementById('section-upload');
-        const manSec = document.getElementById('section-manual');
-        const visSec = document.getElementById('section-vision');
-        const modeIn = document.getElementById('input-mode');
-        
-        [upSec, manSec, visSec].forEach(s => s.classList.add('hidden'));
-        document.querySelectorAll('[id^="btn-"]').forEach(b => {
-            b.classList.remove('bg-white', 'shadow-sm', 'text-primary');
-            b.classList.add('text-gray-400');
-        });
-
-        const activeBtn = document.getElementById('btn-' + mode);
-        activeBtn.classList.remove('text-gray-400');
-        activeBtn.classList.add('bg-white', 'shadow-sm', 'text-primary');
-
-        if(mode === 'upload') {
-            upSec.classList.remove('hidden');
-            modeIn.value = 'upload';
-        } else if(mode === 'manual') {
-            manSec.classList.remove('hidden');
-            modeIn.value = 'manual';
-        } else {
-            visSec.classList.remove('hidden');
-            modeIn.value = 'vision';
-        }
-    }
-</script>
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    </script>
 </body>
 </html>
