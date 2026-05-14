@@ -11,22 +11,29 @@
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden">
     <!-- Background Video (Cropped) -->
     <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-[-2] brightness-75 scale-[1.15] origin-top-left translate-y-[-2%]">
         <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
     </video>
-    <div class="fixed inset-0 bg-[#E6DFD1]/40 z-[-1]"></div>
+    <div class="fixed inset-0 bg-[#E6DFD1]/30 z-[-1]"></div>
 
-    <div class="w-full max-w-md glass-card rounded-[2rem] p-10 shadow-2xl animate-fade-in">
-        <div class="text-center mb-10">
-            <div class="w-16 h-16 bg-[#134235] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span class="text-white text-3xl">🏢</span>
-            </div>
-            <h1 class="text-3xl font-bold tracking-tighter">
+    <!-- Cinematic Story Overlay -->
+    <div class="text-center mb-12 z-10 select-none">
+        <div id="story-step-1" class="story-text text-white text-4xl md:text-5xl font-bold tracking-tight opacity-0">
+            Tired of inventory waste?
+        </div>
+        <div id="story-step-2" class="story-text absolute top-0 left-1/2 -translate-x-1/2 w-full opacity-0">
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tighter">
                 <span class="text-[#1F2933]">Retail</span><span class="text-[#D6A84F]">Flow</span>
             </h1>
-            <p class="text-gray-500 text-sm mt-2 font-medium">Boutique Inventory Intelligence</p>
+            <p class="text-[#134235] text-lg font-bold tracking-[0.2em] mt-2 uppercase">Inventory Intelligence</p>
+        </div>
+    </div>
+
+    <div class="w-full max-w-md glass-card rounded-[2.5rem] p-10 shadow-2xl reveal-on-scroll relative z-10" style="transition-delay: 2s;">
+        <div class="text-center mb-10">
+            <p class="text-gray-500 text-sm font-medium">Boutique Store Manager Portal</p>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -58,5 +65,33 @@
             <a href="{{ url_for('register') }}" class="text-[#134235] font-bold ml-1 hover:underline">Initialize Account</a>
         </div>
     </div>
+
+    <script>
+        // Story Animation Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const step1 = document.getElementById('story-step-1');
+            const step2 = document.getElementById('story-step-2');
+            const card = document.querySelector('.glass-card');
+
+            // Sequence
+            setTimeout(() => {
+                step1.classList.add('story-fade-in');
+            }, 500);
+
+            setTimeout(() => {
+                step1.classList.remove('story-fade-in');
+                step1.classList.add('story-fade-out');
+            }, 2500);
+
+            setTimeout(() => {
+                step2.classList.add('story-fade-in');
+            }, 3500);
+
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 4500);
+        });
+    </script>
 </body>
 </html>
