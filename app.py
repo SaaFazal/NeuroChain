@@ -430,7 +430,7 @@ def chat():
     user_message = data.get('message')
     
     # 1. Retrieve Context (The "R" in RAG) - SEARCH THE FULL VAULT
-    shop_id = request.args.get('shop_id')
+    shop_id = data.get('shop_id')
     if not shop_id:
         shop = Shop.query.filter_by(user_id=current_user.id).first()
         shop_id = shop.id if shop else None

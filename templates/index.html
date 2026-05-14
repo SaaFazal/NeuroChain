@@ -338,7 +338,17 @@
             container.innerHTML += `<div id="${loadingId}" class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 animate-pulse">Scanning Vault Documents...</div></div>`;
             container.scrollTop = container.scrollHeight;
             try {
-                const response = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message }) });
+                const urlParams = new URLSearchParams(window.location.search);
+                const shopId = urlParams.get('shop_id') || "{{ selected_shop.id if selected_shop else '' }}";
+
+                const response = await fetch('/chat', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ 
+                        message: message,
+                        shop_id: shopId
+                    }) 
+                });
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/5 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 leading-relaxed">${data.response}</div></div>`;
