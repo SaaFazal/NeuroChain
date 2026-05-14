@@ -32,14 +32,13 @@
             stroke-dashoffset: 2000;
             transition: stroke-dashoffset 0.1s linear;
         }
-        .slogan-fade { animation: sloganCycle 12s infinite; }
+        .slogan-fade { 
+            opacity: 0;
+            animation: sloganCycle 12s infinite; 
+        }
         @keyframes sloganCycle {
-            0%, 30% { opacity: 0; transform: translateY(10px); }
-            5%, 25% { opacity: 1; transform: translateY(0); }
-            35%, 65% { opacity: 0; transform: translateY(10px); }
-            40%, 60% { opacity: 1; transform: translateY(0); }
-            70%, 100% { opacity: 0; transform: translateY(10px); }
-            75%, 95% { opacity: 1; transform: translateY(0); }
+            0%, 2%, 31%, 100% { opacity: 0; transform: translateY(10px); filter: blur(5px); }
+            5%, 28% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
     </style>
 </head>
