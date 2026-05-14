@@ -429,10 +429,13 @@ def chat():
     data = request.json
     user_message = data.get('message')
     
-    # 1. Retrieve Context (The "R" in RAG)
-    shops = Shop.query.filter_by(user_id=current_user.id).all()
-    # Get history for the first shop or a default
-    history = Sale.query.filter_by(shop_id=shops[0].id).order_by(Sale.date.desc()).limit(10).all() if shops else []
+    # 1. Retrieve Context (The "R" in RAG) - SEARCH THE FULL VAULT
+    shop_id = request.args.get('shop_id')
+    if not shop_id:
+        shop = Shop.query.filter_by(user_id=current_user.id).first()
+        shop_id = shop.id if shop else None
+        
+    history = Sale.query.filter_by(shop_id=shop_id).order_by(Sale.date.desc()).limit(100).all() if shop_id else []
     
     context_str = "Recent Sales Data:\n"
     for s in history:
@@ -440,7 +443,7 @@ def chat():
     
     # 2. Build the Augmented Prompt (The "A" in RAG)
     prompt = f"""
-    You are the RetailFlow Strategy Assistant. Your goal is to help store managers optimize their inventory.
+    You are the CePTFlow Strategy Assistant. Your goal is to help store managers optimize their inventory.
     
     CONTEXT DATA:
     {context_str}
