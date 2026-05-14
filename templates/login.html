@@ -12,8 +12,8 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
-    <!-- Background Video -->
-    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-[-2] brightness-75">
+    <!-- Background Video (Cropped) -->
+    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-[-2] brightness-75 scale-[1.15] origin-top-left translate-y-[-2%]">
         <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
     </video>
     <div class="fixed inset-0 bg-[#E6DFD1]/40 z-[-1]"></div>
