@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>RetailFlow | Inventory Intelligence</title>
+    <title>CePTFlow | Intelligence Suite</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -26,14 +26,29 @@
         }
       }
     </script>
+    <style>
+        .growth-line {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+        .slogan-fade { animation: sloganCycle 12s infinite; }
+        @keyframes sloganCycle {
+            0%, 30% { opacity: 0; transform: translateY(10px); }
+            5%, 25% { opacity: 1; transform: translateY(0); }
+            35%, 65% { opacity: 0; transform: translateY(10px); }
+            40%, 60% { opacity: 1; transform: translateY(0); }
+            70%, 100% { opacity: 0; transform: translateY(10px); }
+            75%, 95% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-bone text-charcoal min-h-screen">
+<body class="bg-bone text-charcoal min-h-screen relative">
 
-    <!-- Scroll-Linked Background Graph -->
-    <div id="ghost-graph" class="fixed inset-0 z-[-1] opacity-5 pointer-events-none">
-        <svg class="w-full h-full" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,500 Q250,200 500,500 T1000,500" stroke="#134235" stroke-width="2" fill="none" class="animate-pulse" />
-            <path d="M0,600 Q250,300 500,600 T1000,600" stroke="#134235" stroke-width="2" fill="none" opacity="0.5" />
+    <!-- Dynamic Growth Path (Scroll-Linked) -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none opacity-20">
+        <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="none">
+            <path id="scroll-path" class="growth-line" d="M -50,800 L 200,750 L 400,820 L 600,600 L 900,650 L 1200,300 L 1500,100" stroke="#D6A84F" stroke-width="4" fill="none" />
         </svg>
     </div>
 
@@ -41,13 +56,13 @@
     <nav class="sticky top-0 w-full h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 z-[100] flex items-center justify-between px-12">
         <div class="flex items-center gap-12">
             <h1 class="text-2xl font-bold tracking-tighter">
-                <span class="text-charcoal">Retail</span><span class="text-gold">Flow</span>
+                <span class="text-charcoal">CePT</span><span class="text-gold">Flow</span>
             </h1>
             <div class="hidden md:flex gap-8">
-                <a href="/" class="text-primary font-bold text-sm border-b-2 border-primary pb-1">Dashboard</a>
+                <a href="/" class="text-primary font-bold text-sm border-b-2 border-primary pb-1">Intelligence</a>
                 <div class="relative group">
                     <button class="text-secondary hover:text-primary text-sm font-bold flex items-center gap-1">
-                        Locations <span class="material-symbols-outlined text-xs">expand_more</span>
+                        Network <span class="material-symbols-outlined text-xs">expand_more</span>
                     </button>
                     <div class="absolute top-full left-0 mt-2 w-48 bg-white shadow-xl rounded-xl border border-gray-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2">
                         {% for shop in shops %}
@@ -74,20 +89,36 @@
         <!-- TV Hero Section -->
         <section class="text-center space-y-12 reveal-on-scroll">
             <div class="space-y-4">
-                <p class="text-primary font-bold text-[10px] uppercase tracking-[0.4em]">Strategic Intelligence</p>
+                <p class="text-primary font-bold text-[10px] uppercase tracking-[0.4em]">CePTFlow Intelligence</p>
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-charcoal">
                     Tired of inventory <span class="text-gold italic">waste?</span>
                 </h1>
                 <p class="text-secondary max-w-2xl mx-auto text-lg font-medium opacity-70">
-                    RetailFlow turns your sales data into actionable demand trajectory.
+                    CePTFlow turns complex store data into actionable strategic trajectory.
                 </p>
             </div>
 
-            <!-- TV Framed Video -->
+            <!-- TV Framed Video with Slogans -->
             <div class="relative max-w-4xl mx-auto group">
                 <div class="absolute -inset-4 bg-gradient-to-tr from-gold/20 to-primary/20 blur-2xl opacity-30 group-hover:opacity-50 transition-all"></div>
-                <div class="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white aspect-video bg-black">
-                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white aspect-video bg-black">
+                    <!-- Slogan Overlays -->
+                    <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                        <div class="text-center">
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 0s;">
+                                <h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Eliminate Waste.</h2>
+                            </div>
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 4s;">
+                                <h2 class="text-gold text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">Maximize Volume.</h2>
+                            </div>
+                            <div class="slogan-fade absolute inset-0 flex items-center justify-center transition-all duration-1000" style="animation-delay: 8s;">
+                                <h2 class="text-white text-3xl md:text-5xl font-bold tracking-tight drop-shadow-lg">CePTFlow Intelligence.</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cropped Video -->
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover scale-[1.15] origin-top-left translate-y-[-5%] brightness-90">
                         <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
                     </video>
                 </div>
@@ -124,7 +155,7 @@
             <div class="flex justify-between items-center mb-12">
                 <div>
                     <h3 class="text-2xl font-bold">Demand Trajectory</h3>
-                    <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">Live AI Analysis</p>
+                    <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">Strategic AI Analysis</p>
                 </div>
             </div>
             
@@ -165,7 +196,7 @@
                             <span class="material-symbols-outlined text-white text-sm">smart_toy</span>
                         </div>
                         <div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">
-                            Ready to analyze your store performance. What strategic decisions are you facing today?
+                            CePTFlow AI is ready to analyze your performance. How can I help you today?
                         </div>
                     </div>
                 </div>
@@ -196,7 +227,6 @@
             <div class="p-8">
                 <form action="/forecast" method="post" enctype="multipart/form-data" class="space-y-8">
                     <input type="hidden" name="shop_id" value="{{ selected_shop.id if selected_shop else '' }}">
-                    
                     <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-dashed border-gray-200 text-center hover:border-primary transition-all">
                         <input type="file" name="file" id="file-input" class="hidden">
                         <label for="file-input" class="cursor-pointer">
@@ -204,40 +234,28 @@
                             <p class="text-sm font-bold text-gray-400 mt-2">Upload Sales CSV</p>
                         </label>
                     </div>
-
-                    <button type="submit" class="w-full bg-primary text-white py-5 rounded-2xl font-bold shadow-lg">
-                        PROCESS INTELLIGENCE
-                    </button>
+                    <button type="submit" class="w-full bg-primary text-white py-5 rounded-2xl font-bold shadow-lg">PROCESS INTELLIGENCE</button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+        const lenis = new Lenis({ duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // Ghost Graph Parallax
+        // Growth Path Scroll Logic
         window.addEventListener('scroll', () => {
-            const scroll = window.scrollY;
-            document.getElementById('ghost-graph').style.transform = `translateY(${scroll * 0.15}px)`;
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const path = document.getElementById('scroll-path');
+            const drawLength = 2000 * scrollPercent;
+            path.style.strokeDashoffset = 2000 - drawLength;
         });
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('is-visible');
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
         {% if graphJSON %}
@@ -250,31 +268,20 @@
             const container = document.getElementById('chat-messages');
             const message = input.value.trim();
             if (!message) return;
-
             container.innerHTML += `<div class="flex gap-4 max-w-[85%] ml-auto flex-row-reverse animate-fade-in"><div class="bg-white text-charcoal p-5 rounded-[1.5rem] rounded-tr-none shadow-sm text-sm border border-gray-100">${message}</div></div>`;
             input.value = '';
             container.scrollTop = container.scrollHeight;
-
             const loadingId = 'loading-' + Date.now();
             container.innerHTML += `<div id="${loadingId}" class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5 animate-pulse">Consulting intelligence...</div></div>`;
             container.scrollTop = container.scrollHeight;
-
             try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
+                const response = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message }) });
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 container.innerHTML += `<div class="flex gap-4 max-w-[85%] animate-fade-in"><div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-sm">smart_toy</span></div><div class="bg-white/10 text-white p-5 rounded-[1.5rem] rounded-tl-none backdrop-blur-sm text-sm border border-white/5">${data.response}</div></div>`;
-            } catch (e) {
-                document.getElementById(loadingId).remove();
-            }
+            } catch (e) { document.getElementById(loadingId).remove(); }
             container.scrollTop = container.scrollHeight;
         }
-
-        document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
     </script>
 </body>
 </html>
