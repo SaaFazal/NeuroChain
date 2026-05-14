@@ -430,20 +430,27 @@ def download():
 @app.route('/chat', methods=['POST'])
 @login_required
 def chat():
-    data = request.json
-    user_message = data.get('message')
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"response": "SYSTEM ERROR: Invalid request format. No data received."})
+        
+    user_message = data.get('message', '')
     
     # 1. Retrieve Context (The "R" in RAG) - SEARCH THE FULL VAULT
     shop_id = data.get('shop_id')
-    if not shop_id:
-        shop = Shop.query.filter_by(user_id=current_user.id).first()
-        shop_id = shop.id if shop else None
+    try:
+        if not shop_id:
+            shop = Shop.query.filter_by(user_id=current_user.id).first()
+            shop_id = shop.id if shop else None
+            
+        history = Sale.query.filter_by(shop_id=shop_id).order_by(Sale.date.desc()).limit(100).all() if shop_id else []
         
-    history = Sale.query.filter_by(shop_id=shop_id).order_by(Sale.date.desc()).limit(100).all() if shop_id else []
-    
-    context_str = "Recent Sales Data:\n"
-    for s in history:
-        context_str += f"- {s.date}: {s.category.name if s.category else 'General'}, £{s.amount}\n"
+        context_str = "Recent Sales Data:\n"
+        for s in history:
+            cat_name = s.category.name if (s.category and hasattr(s.category, 'name')) else "General"
+            context_str += f"- {s.date}: {cat_name}, £{s.amount or 0}\n"
+    except Exception as e:
+        return jsonify({"response": f"DATABASE CONTEXT ERROR: {str(e)}"})
     
     # 2. Build the Augmented Prompt (The "A" in RAG)
     prompt = f"""
