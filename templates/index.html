@@ -33,16 +33,27 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     </style>
 </head>
-<body class="bg-background text-on-background min-h-screen">
+<body class="bg-[#E6DFD1] text-on-background min-h-screen">
+
+    <!-- Parallax Background Section -->
+    <div class="fixed inset-0 z-[-2] overflow-hidden">
+        <video autoplay muted loop playsinline class="w-full h-full object-cover brightness-75">
+            <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
+        </video>
+    </div>
+    <!-- This overlay fades as you scroll -->
+    <div id="scroll-overlay" class="fixed inset-0 z-[-1] bg-[#E6DFD1]/60 transition-opacity duration-500"></div>
 
 <!-- SideNavBar -->
-<aside class="h-screen w-64 fixed left-0 top-0 bg-linen-cream shadow-lg flex flex-col py-6 z-50">
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#E6DFD1]/80 backdrop-blur-xl shadow-lg flex flex-col py-6 z-50 border-r border-white/20">
     <div class="px-6 py-4 flex items-center gap-3 mb-8">
-        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-sm">inventory_2</span>
+        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+            <span class="material-symbols-outlined text-white text-lg">inventory_2</span>
         </div>
         <div>
-            <h1 class="font-bold text-xl text-primary">RetailFlow</h1>
+            <h1 class="font-bold text-xl tracking-tighter">
+                <span class="text-[#1F2933]">Retail</span><span class="text-[#D6A84F]">Flow</span>
+            </h1>
             <p class="text-[10px] text-secondary uppercase tracking-widest font-bold">Intelligence</p>
         </div>
     </div>
@@ -78,7 +89,7 @@
 <!-- Main Content -->
 <main class="ml-64 min-h-screen flex flex-col">
     <!-- Top Bar -->
-    <header class="flex justify-between items-center w-full px-12 h-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-40">
+    <header class="flex justify-between items-center w-full px-12 h-20 bg-white/60 backdrop-blur-xl border-b border-white/20 sticky top-0 z-40">
         <div class="flex items-center gap-8">
             <h2 class="text-xl font-bold text-primary">{{ selected_shop.name }}</h2>
             <div class="hidden md:flex gap-6">
@@ -103,13 +114,12 @@
         <!-- Action & Summary -->
         <div class="flex justify-between items-end mb-8">
             <div>
-                <p class="text-primary font-bold text-xs uppercase tracking-widest mb-1">Intelligence Dashboard</p>
+                <p class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Intelligence Dashboard</p>
                 <h1 class="text-4xl font-bold text-on-background">Demand Forecast</h1>
             </div>
             
             <div class="flex gap-4">
-                <!-- Modal Trigger (Add Data) -->
-                <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg hover:brightness-110 transition-all flex items-center gap-2">
+                <button onclick="document.getElementById('input-modal').classList.remove('hidden')" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-xl hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
                     <span class="material-symbols-outlined">add</span>
                     Feed Intelligence
                 </button>
@@ -118,22 +128,22 @@
 
         <!-- Metrics Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Predicted Demand</p>
+            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50">
+                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">Predicted Demand</p>
                 <div class="flex items-end justify-between">
                     <h3 class="text-3xl font-bold text-primary">£{{ total_forecast if total_forecast else '0.00' }}</h3>
                     <span class="bg-success-mint text-primary px-2 py-1 rounded-lg text-[10px] font-bold">Next 7 Days</span>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Historical Volume</p>
+            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50">
+                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">Historical Volume</p>
                 <div class="flex items-end justify-between">
                     <h3 class="text-3xl font-bold text-secondary">£{{ total_historical if total_historical else '0.00' }}</h3>
                     <span class="text-[10px] text-gray-400">Total processed</span>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">AI Confidence</p>
+            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-sm border border-white/50">
+                <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-2">AI Confidence</p>
                 <div class="flex items-end justify-between">
                     <h3 class="text-3xl font-bold text-on-background">94.2%</h3>
                     <span class="material-symbols-outlined text-primary">auto_awesome</span>
@@ -142,7 +152,7 @@
         </div>
 
         <!-- Main Chart -->
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[2rem] shadow-sm border border-white/50">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="font-bold text-lg">Demand Trajectory</h3>
                 <div class="flex gap-2">
@@ -162,14 +172,14 @@
         </div>
 
         <!-- Product Insights Table -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white/90 backdrop-blur-sm rounded-[2rem] shadow-sm border border-white/50 overflow-hidden">
             <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
                 <h3 class="font-bold text-lg">Product Insights</h3>
                 <span class="text-xs text-gray-400">Last 5 records</span>
             </div>
             <table class="w-full text-left">
                 <thead>
-                    <tr class="bg-gray-50/50">
+                    <tr class="bg-gray-50/30">
                         <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Date</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest">Category</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-secondary uppercase tracking-widest text-right">Amount</th>
@@ -191,7 +201,7 @@
 
         <!-- AI Strategy Assistant (RAG Ready) -->
         <div class="mt-8">
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-[500px]">
+            <div class="bg-white/90 backdrop-blur-sm rounded-[2rem] shadow-sm border border-white/50 overflow-hidden flex flex-col h-[500px]">
                 <div class="bg-primary p-6 text-white flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
@@ -229,15 +239,15 @@
     </section>
 </main>
 
-<!-- Modal for Input (Intelligence Feed) -->
+<!-- Modal for Input -->
 <div id="input-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
-    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
+    <div class="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
         <div class="bg-primary p-8 text-white flex justify-between items-center">
             <div>
                 <h3 class="text-xl font-bold">Feed Intelligence</h3>
                 <p class="text-xs text-white/70">Update your inventory data</p>
             </div>
-            <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="hover:bg-white/10 p-2 rounded-full">
+            <button onclick="document.getElementById('input-modal').classList.add('hidden')" class="hover:bg-white/10 p-2 rounded-full transition-all">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
@@ -254,26 +264,26 @@
                 </div>
 
                 <div id="section-upload" class="mb-8">
-                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary transition-all">
+                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary transition-all group">
                         <input type="file" name="file" class="hidden" id="file-input">
                         <label for="file-input" class="cursor-pointer">
-                            <span class="material-symbols-outlined text-4xl text-gray-200">cloud_upload</span>
+                            <span class="material-symbols-outlined text-4xl text-gray-200 group-hover:text-primary transition-colors">cloud_upload</span>
                             <p class="text-sm text-gray-400 mt-2">Drop CSV or Click to Browse</p>
                         </label>
                     </div>
                 </div>
 
                 <div id="section-manual" class="hidden mb-8 space-y-4">
-                    <select name="category_id" class="w-full border-gray-200 rounded-xl text-sm p-3">
+                    <select name="category_id" class="w-full border-gray-200 rounded-xl text-sm p-4 focus:ring-primary">
                         {% for cat in categories %}
                         <option value="{{ cat.id }}">{{ cat.name }}</option>
                         {% endfor %}
                     </select>
-                    <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-200 rounded-xl text-sm p-3">
+                    <input type="number" step="0.01" name="amount" placeholder="Amount (£)" class="w-full border-gray-200 rounded-xl text-sm p-4 focus:ring-primary">
                 </div>
 
                 <div id="section-vision" class="hidden mb-8 text-center">
-                    <div class="border-2 border-dashed border-primary/20 bg-primary/5 rounded-2xl p-8">
+                    <div class="border-2 border-dashed border-primary/20 bg-primary/5 rounded-2xl p-8 hover:bg-primary/10 transition-all cursor-pointer">
                         <input type="file" name="receipt_image" id="receipt-upload" class="hidden" onchange="this.form.submit()">
                         <label for="receipt-upload" class="cursor-pointer">
                             <span class="material-symbols-outlined text-4xl text-primary">camera_alt</span>
@@ -282,7 +292,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg hover:brightness-110 transition-all">
+                <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all">
                     PROCESS INTELLIGENCE
                 </button>
             </form>
@@ -290,74 +300,81 @@
     </div>
 </div>
 
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const container = document.getElementById('chat-messages');
-            const message = input.value.trim();
-            
-            if (!message) return;
+<script>
+    // Parallax Logic
+    window.addEventListener('scroll', () => {
+        const scrollVal = window.scrollY;
+        const overlay = document.getElementById('scroll-overlay');
+        const opacity = Math.max(0.3, 0.6 - (scrollVal / 600));
+        overlay.style.opacity = opacity;
+    });
 
-            // User Message
-            container.innerHTML += `
-                <div class="flex gap-3 max-w-[80%] ml-auto flex-row-reverse">
-                    <div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm">
-                        ${message}
-                    </div>
-                </div>
-            `;
-            input.value = '';
-            container.scrollTop = container.scrollHeight;
-
-            // Bot Response (Loading)
-            const loadingId = 'loading-' + Date.now();
-            container.innerHTML += `
-                <div id="${loadingId}" class="flex gap-3 max-w-[80%]">
-                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-secondary animate-pulse">
-                        Analyzing your data...
-                    </div>
-                </div>
-            `;
-            container.scrollTop = container.scrollHeight;
-
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
-                const data = await response.json();
-                
-                document.getElementById(loadingId).remove();
-                container.innerHTML += `
-                    <div class="flex gap-3 max-w-[80%]">
-                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
-                        </div>
-                        <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-on-background">
-                            ${data.response}
-                        </div>
-                    </div>
-                `;
-            } catch (error) {
-                document.getElementById(loadingId).remove();
-                console.error('Chat error:', error);
-            }
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Allow Enter key to send
-        document.getElementById('chat-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        {% if graphJSON %}
+    {% if graphJSON %}
         var graph = {{ graphJSON | safe }};
         Plotly.newPlot('plotly-graph', graph.data, graph.layout);
     {% endif %}
+
+    async function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const container = document.getElementById('chat-messages');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        // User Message
+        container.innerHTML += `
+            <div class="flex gap-3 max-w-[80%] ml-auto flex-row-reverse">
+                <div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm">
+                    ${message}
+                </div>
+            </div>
+        `;
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+
+        // Bot Response (Loading)
+        const loadingId = 'loading-' + Date.now();
+        container.innerHTML += `
+            <div id="${loadingId}" class="flex gap-3 max-w-[80%]">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-secondary animate-pulse">
+                    Analyzing your data...
+                </div>
+            </div>
+        `;
+        container.scrollTop = container.scrollHeight;
+
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await response.json();
+            
+            document.getElementById(loadingId).remove();
+            container.innerHTML += `
+                <div class="flex gap-3 max-w-[80%]">
+                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm text-on-background">
+                        ${data.response}
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            console.error('Chat error:', error);
+        }
+        container.scrollTop = container.scrollHeight;
+    }
+
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendMessage();
+    });
 
     function switchMode(mode) {
         const upSec = document.getElementById('section-upload');

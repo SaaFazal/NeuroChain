@@ -3,42 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | NeuroChain AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>RetailFlow | Access Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #E6DFD1; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+    </style>
 </head>
-<body class="auth-page">
-    <div class="dashboard-container" style="height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div class="glass-card animate-fade" style="width: 100%; max-width: 450px; padding: 3rem;">
-            <header style="margin-bottom: 2rem; text-align: center;">
-                <h1 style="font-size: 2rem;">NeuroChain</h1>
-                <p class="subtitle">Access the Neural Ingestion Portal</p>
-            </header>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="fixed inset-0 w-full h-full object-cover z-[-2] brightness-75">
+        <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
+    </video>
+    <div class="fixed inset-0 bg-[#E6DFD1]/40 z-[-1]"></div>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
+    <div class="w-full max-w-md glass-card rounded-[2rem] p-10 shadow-2xl animate-fade-in">
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-[#134235] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <span class="text-white text-3xl">🏢</span>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tighter">
+                <span class="text-[#1F2933]">Retail</span><span class="text-[#D6A84F]">Flow</span>
+            </h1>
+            <p class="text-gray-500 text-sm mt-2 font-medium">Boutique Inventory Intelligence</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
                 {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">
-                    {{ message }}
-                  </div>
+                    <div class="mb-6 p-4 rounded-xl text-sm font-bold {% if category == 'danger' %}bg-red-50 text-red-600{% else %}bg-green-50 text-green-600{% endif %}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-              {% endif %}
-            {% endwith %}
+            {% endif %}
+        {% endwith %}
 
-            <form method="POST">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="input-minimal" placeholder="Enter your ID" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="input-minimal" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-primary" style="margin-top: 1rem;">Authenticate</button>
-            </form>
+        <form action="{{ url_for('login') }}" method="post" class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Username</label>
+                <input type="text" name="username" placeholder="Enter your ID" class="w-full bg-white/50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Password</label>
+                <input type="password" name="password" placeholder="••••••••" class="w-full bg-white/50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-[#134235] transition-all" required>
+            </div>
+            <button type="submit" class="w-full bg-[#134235] text-white py-4 rounded-xl font-bold shadow-lg hover:brightness-110 active:scale-[0.98] transition-all">
+                AUTHENTICATE
+            </button>
+        </form>
 
-            <p style="margin-top: 2rem; text-align: center; font-size: 0.9rem; color: var(--text-secondary);">
-                New architect? <a href="{{ url_for('register') }}" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Initialize Node</a>
-            </p>
+        <div class="mt-10 text-center text-sm">
+            <span class="text-gray-500">New store manager?</span>
+            <a href="{{ url_for('register') }}" class="text-[#134235] font-bold ml-1 hover:underline">Initialize Account</a>
         </div>
     </div>
 </body>
