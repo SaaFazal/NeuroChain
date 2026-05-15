@@ -475,10 +475,15 @@ def chat():
         # Initialize the engine locally for stability
         genai.configure(api_key=api_key)
         
-        # Try gemini-pro which is universally supported
-        model = genai.GenerativeModel('gemini-pro')
-        
-        response = model.generate_content(prompt)
+        try:
+            # Try the standard flash model first
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            response = model.generate_content(prompt)
+        except Exception:
+            # DISCOVERY MODE: If it fails, list what IS available
+            available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+            model_list = ", ".join(available_models)
+            return jsonify({"response": f"MODEL DISCOVERY ERROR: Your account has access to these models: [{model_list}]. Please tell the assistant which one to use."})
         ai_response = response.text.replace('*', '') # Clean up markdown
         
         if not ai_response:
