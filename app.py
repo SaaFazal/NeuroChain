@@ -474,8 +474,9 @@ def chat():
             
         # Initialize the engine locally for stability
         genai.configure(api_key=api_key)
-        # Using the standard naming convention
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Try gemini-pro which is universally supported
+        model = genai.GenerativeModel('gemini-pro')
         
         response = model.generate_content(prompt)
         ai_response = response.text.replace('*', '') # Clean up markdown
