@@ -475,9 +475,26 @@ def chat():
         # Initialize the engine locally for stability
         genai.configure(api_key=api_key)
         
-        # Using the standard Flash model with the full prefix to ensure free-tier access
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
-        response = model.generate_content(prompt)
+        # Initialize the engine locally
+        genai.configure(api_key=api_key)
+        
+        # SELF-HEALING MODE: Try multiple names until one works
+        success = False
+        ai_response = ""
+        models_to_try = ['models/gemini-1.5-flash', 'models/gemini-pro', 'models/gemini-flash-latest', 'gemini-1.5-flash']
+        
+        for model_name in models_to_try:
+            try:
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(prompt)
+                ai_response = response.text.replace('*', '')
+                success = True
+                break
+            except Exception:
+                continue
+                
+        if not success:
+            return jsonify({"response": "SYSTEM ALERT: All Gemini model variants (Flash/Pro) failed to connect. This usually means a region restriction or API version mismatch."})
         ai_response = response.text.replace('*', '') # Clean up markdown
         
         if not ai_response:
