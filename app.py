@@ -475,8 +475,8 @@ def chat():
         # Initialize the engine locally for stability
         genai.configure(api_key=api_key)
         
-        # Using the advanced 2.0 Flash model found in your account
-        model = genai.GenerativeModel('models/gemini-2.0-flash')
+        # Using the standard Flash model with the full prefix to ensure free-tier access
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         response = model.generate_content(prompt)
         ai_response = response.text.replace('*', '') # Clean up markdown
         
