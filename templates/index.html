@@ -217,7 +217,12 @@
                     </button>
                 </div>
                 
-                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4 bg-charcoal/50">
+                <div id="chat-messages" class="flex-1 p-8 overflow-y-auto space-y-4 bg-charcoal/50" style="scrollbar-width: thin; scrollbar-color: #D6A84F transparent;">
+                    <style>
+                        #chat-messages::-webkit-scrollbar { width: 4px; }
+                        #chat-messages::-webkit-scrollbar-track { background: transparent; }
+                        #chat-messages::-webkit-scrollbar-thumb { background: #D6A84F; border-radius: 10px; }
+                    </style>
                     <div class="flex gap-4 max-w-[85%]">
                         <div class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
                             <span class="material-symbols-outlined text-white text-sm">smart_toy</span>
